@@ -1,0 +1,57 @@
+{
+   "checksum": "aede0b67bd4efeedba9ec708a5bcaf98",
+   "roots": {
+      "bookmark_bar": {
+         "children": [ {
+            "date_added": "13171186298544437",
+            "id": "6",
+            "meta_info": {
+               "last_visited_desktop": "13171461330823185"
+            },
+            "name": "Play Balloon FRVR - Navigate the balloon circle",
+            "type": "url",
+            "url": "https://balloon.frvr.com/"
+         }, {
+            "date_added": "13171186307243997",
+            "id": "7",
+            "meta_info": {
+               "last_visited_desktop": "13171342511127096"
+            },
+            "name": "LayaAir功能介绍__LAYABOX技术文档",
+            "type": "url",
+            "url": "https://ldc.layabox.com/doc/?nav=zh-as-0-3-0"
+         }, {
+            "date_added": "13171186312362682",
+            "id": "8",
+            "meta_info": {
+               "last_visited_desktop": "13171342526658935"
+            },
+            "name": "LayaAir功能介绍__LAYABOX技术文档",
+            "type": "url",
+            "url": "https://ldc.layabox.com/doc/?nav=zh-ts-0-3-0"
+         } ],
+         "date_added": "13171185445125661",
+         "date_modified": "13171186312362682",
+         "id": "1",
+         "name": "书签栏",
+         "type": "folder"
+      },
+      "other": {
+         "children": [  ],
+         "date_added": "13171185445125666",
+         "date_modified": "0",
+         "id": "2",
+         "name": "其他书签",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [  ],
+         "date_added": "13171185445125667",
+         "date_modified": "0",
+         "id": "3",
+         "name": "移动设备书签",
+         "type": "folder"
+      }
+   },
+   "version": 1
+}
