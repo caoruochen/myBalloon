@@ -24,20 +24,36 @@ class Balloon extends Laya.Sprite{
         this.bugAni = new Laya.Animation();
         this.bugAni.x = 60;
         this.bugAni.y = -76;
+
+        this.cretePinkFilter();
    }
 
-    private createImg(path: string): Laya.Sprite {
+    createImg(path: string): Laya.Sprite {
         var img : Laya.Sprite= new Laya.Sprite();
         img.loadImage(path);
         this.addChild(img);
         return img;   
     }
 
-    private onBugLoaded():void
+    onBugLoaded():void
     {   
         Laya.Animation.createFrames(["bug/bug1.png","bug/bug2.png"],"bug");
         this.bugAni.interval = 480;
         this.addChild(this.bugAni);
         this.bugAni.play(0,true,"bug");     
     }
+
+    /**创建粉色滤镜**/
+    private cretePinkFilter():void{
+		var Mat = 
+        [
+				0.988, 0, 0, 0, 0, //R
+				0.541, 0, 0, 0, 0, //G
+				0.675, 0, 0, 0, 0, //B
+				0, 0, 0, 1, 0, //A
+		];
+		var pinkFilter = new Laya.ColorFilter(Mat);
+        this.filters = [pinkFilter];
+        this.alpha = 0.92;
+    } 
 }

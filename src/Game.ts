@@ -1,11 +1,11 @@
 // 程序入口
 class GameMain{
     //游戏容器
-    private line:Laya.Sprite;
+    // private line:Laya.Sprite;
+    private mapLine:Laya.Sprite;
     private balloon:Laya.Sprite;
     private fingerAni:Laya.Animation;
 
-    // private balloonXV:number = 2;   //初始的x轴速度  
     private balloonYV:number = 0;   //初始的y轴速度  
     private gravity:number = 0.1;    //重力加速度  
     private jumpV:number = 3.8;     //跳跃时获得的向上速度
@@ -25,27 +25,15 @@ class GameMain{
 		Laya.stage.alignV = "middle";
         //设置竖屏
         // Laya.stage.screenMode = "horizontal";
-
-        //实例一个背景
-        var bg = new Laya.Image();
-        bg.skin = "res/img/sky.png";
-        Laya.stage.addChild(bg);
-        // Laya.stage.bgColor="#c3ebef";
-
-        //创建循环滚动的line
-        this.line = new Line();
-        Laya.stage.addChild(this.line);
-        this.line.y = 500;
-        //给line加黑色滤镜
-        this.creteBlockFilter();
-        // this.line.zOrder = 1;        
+        //加载图片
+        Laya.loader.load(["res/img/sky.png","res/img/line.png", "res/img/line2.png"], laya.utils.Handler.create(this, this.onLoaded));
+        
 
         //气球容器对象
         this.balloon = new Balloon();
         Laya.stage.addChild(this.balloon);
         this.balloon.x = 400;
         this.balloon.y = 400; //330-430
-        this.cretePinkFilter();
 
         //创建动画实例 手指
         this.fingerAni = new Laya.Animation();
@@ -59,37 +47,25 @@ class GameMain{
         Laya.timer.frameLoop(1,this,this.onLoop);
     }
 
-    /**创建黑色滤镜**/
-    private creteBlockFilter():void{
-       //由 20 个项目（排列成 4 x 5 矩阵）组成的数组，黑图
-		var blockMat = 
-        [
-				0.216, 0, 0, 0, 0, //R
-				0.294, 0, 0, 0, 0, //G
-				0.294, 0, 0, 0, 0, //B
-				0, 0, 0, 1, 0, //A
-		];
-		//创建一个颜色滤镜对象
-		var blockFilter = new Laya.ColorFilter(blockMat);
-        //添加黑色颜色滤镜
-        this.line.filters = [blockFilter];
-    } 
-    /**创建粉色滤镜**/
-    private cretePinkFilter():void{
-		var Mat = 
-        [
-				0.988, 0, 0, 0, 0, //R
-				0.541, 0, 0, 0, 0, //G
-				0.675, 0, 0, 0, 0, //B
-				0, 0, 0, 1, 0, //A
-		];
-		var pinkFilter = new Laya.ColorFilter(Mat);
-        this.balloon.filters = [pinkFilter];
-        this.balloon.alpha = 0.92;
-    } 
+    onLoaded():void{
+        //实例一个背景
+        var bg = new Laya.Image();
+        bg.skin = "res/img/sky.png";
+        Laya.stage.addChild(bg);
+        // Laya.stage.bgColor="#c3ebef";
+
+        //创建循环滚动的line
+        // this.line = new Line();
+        // Laya.stage.addChild(this.line);
+        // this.line.y = 500;
+        // this.line.zOrder = 1; 
+        this.mapLine = new MapLine();
+		Laya.stage.addChild(this.mapLine);
+    }
+
 
     //手指动画
-    private onFingerLoaded():void
+    onFingerLoaded():void
     {   
         Laya.Animation.createFrames(["finger/finger1.png","finger/finger2.png","finger/finger3.png","finger/finger4.png"],"finger");
         this.fingerAni = new Laya.Animation();
@@ -101,31 +77,28 @@ class GameMain{
         this.fingerAni.play(0,true,"finger");     
     }
 
-    private onLoop():void{
-        console.log(this.balloon.y);
+    onLoop():void{
+        // console.log(this.balloon.y);
         this.balloonDown();                    
-        // if(this.balloon.y >= 330 && this.balloon.y <= 430){
-        //     this.balloonDown();            
-        // }else{
-        //     this.balloonYV = 0;            
-        // }
     }
     //气球运动
-    private balloonDown():void{  
-        this.balloon.y += this.balloonYV;
-        this.balloonYV += this.gravity;
-        // this.balloon.skewY = - this.balloonYV; //倾斜
-        // this.balloon.rotation = -0.5 * this.balloonYV; //旋转
-         if(this.balloon.y <= 330){
-            this.balloonYV = 0;
+    balloonDown():void{  
+       
+        if(this.balloon.y <= 330 && this.balloonYV <= 0){
+            this.balloonYV += this.gravity;
+            return;
         }
+        this.balloon.y += this.balloonYV;
+        this.balloonYV += this.gravity; 
         if(this.balloon.y >= 430){
             this.balloonYV = 0;
         }
+        // this.balloon.skewY = - this.balloonYV; //倾斜
+        // this.balloon.rotation = -0.5 * this.balloonYV; //旋转
+        
     }
      //监听点击事件
-    private clickHandler():void {
-        // this.balloon.y -= this.jumpV;
+    clickHandler():void {
         this.balloonYV -= this.jumpV;
     }
 

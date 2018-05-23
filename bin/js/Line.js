@@ -8,53 +8,59 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-/*
-* 循环滚动的line;
-*/
 var Line = /** @class */ (function (_super) {
     __extends(Line, _super);
     function Line() {
         var _this = _super.call(this) || this;
-        // private screenX : number = Laya.Browser.clientWidth;
-        _this.lineNum = Math.ceil(1925 / 87) + 1;
-        _this.num1 = Math.ceil(_this.lineNum / 2);
-        _this.num2 = _this.lineNum - _this.num1;
+        //背景贴图纹理
+        _this.bgTexture = null;
+        //背景
+        _this.bg = null;
+        _this.isOut = false; //右边超出屏幕
         _this.init();
         return _this;
     }
     Line.prototype.init = function () {
-        // var randomNum : number = Math.floor(Math.random()*10);
-        var posX = 0;
-        for (var i = 0; i < this.num1; i++) {
-            var line1 = this.createLine("res/img/line.png");
-            line1.x = posX;
-            posX += 87;
+        //如果不开启autoSize 父容器的宽度和高度无法获取 
+        this.autoSize = true;
+        this.x = 0;
+        this.y = 500;
+        if (this.bg == null) {
+            //贴图纹理
+            this.bgTexture = Laya.loader.getRes("res/img/line2.png");
+            this.bg = new Laya.Sprite();
+            this.bg.graphics.clear();
+            this.addChild(this.bg);
         }
-        for (var i = 0; i < this.num2; i++) {
-            var line2 = this.createLine("res/img/line2.png");
-            line2.x = posX;
-            posX += 87;
-        }
+        // this.bg.graphics.drawTexture(this.bgTexture, 0, 0, 960, 14);
+        //随机一个范围值
+        var _w = 87 * (3 + Math.floor(10 * Math.random()));
+        this.bg.graphics.clear();
+        console.log(Laya.Texture.createFromTexture(this.bgTexture, 0, 0, _w, 14));
+        //Texture.createFromTexture 是根据宽度和高度来截取一个图片并且返回一个Texture对象
+        this.bg.graphics.drawTexture(Laya.Texture.createFromTexture(this.bgTexture, 0, 0, _w, 14), 0, 0, _w, 14);
         Laya.timer.frameLoop(1, this, this.onLoop);
     };
-    Line.prototype.createLine = function (skin) {
-        var line = new Laya.Sprite();
-        line.loadImage(skin);
-        // line.pos(0,500);
-        this.addChild(line);
-        return line;
-    };
     Line.prototype.onLoop = function () {
-        //容器每帧向右移动一像素
         this.x -= 1;
-        //遍历所有的line
-        for (var i = this.numChildren - 1; i > -1; i--) {
-            var line = this.getChildAt(i);
-            if (line.x + this.x <= -87) {
-                line.x += 87 * this.numChildren;
-            }
+        //判断右边是否除了边界 如果出了 就通知生成新的line 这里增加一个变量来判断当前是否已经通知外部了 
+        if (!this.isOut && (this.x + this.width) <= 1925) {
+            this.isOut = true;
+            this.event(Line.OUT_LINE, this);
+            // console.log(this.x + this.width);
+        }
+        else if ((this.x + this.width) < 0) {
+            //判断整个line是否不在屏幕里面了 如果不在了 移除当前floor
+            Laya.timer.clear(this, this.onLoop);
+            this.visible = false;
+            this.event(Line.DIE_LINE, this);
         }
     };
+    //事件名称
+    //超过屏幕一定值出发新的floor事件
+    Line.OUT_LINE = "out_line";
+    //整个地板都不在屏幕里面事件
+    Line.DIE_LINE = "die_line";
     return Line;
 }(Laya.Sprite));
 //# sourceMappingURL=Line.js.map

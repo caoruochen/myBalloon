@@ -1,7 +1,6 @@
 // 程序入口
 var GameMain = /** @class */ (function () {
     function GameMain() {
-        // private balloonXV:number = 2;   //初始的x轴速度  
         this.balloonYV = 0; //初始的y轴速度  
         this.gravity = 0.1; //重力加速度  
         this.jumpV = 3.8; //跳跃时获得的向上速度
@@ -18,24 +17,13 @@ var GameMain = /** @class */ (function () {
         Laya.stage.alignV = "middle";
         //设置竖屏
         // Laya.stage.screenMode = "horizontal";
-        //实例一个背景
-        var bg = new Laya.Image();
-        bg.skin = "res/img/sky.png";
-        Laya.stage.addChild(bg);
-        // Laya.stage.bgColor="#c3ebef";
-        //创建循环滚动的line
-        this.line = new Line();
-        Laya.stage.addChild(this.line);
-        this.line.y = 500;
-        //给line加黑色滤镜
-        this.creteBlockFilter();
-        // this.line.zOrder = 1;        
+        //加载图片
+        Laya.loader.load(["res/img/sky.png", "res/img/line.png", "res/img/line2.png"], laya.utils.Handler.create(this, this.onLoaded));
         //气球容器对象
         this.balloon = new Balloon();
         Laya.stage.addChild(this.balloon);
         this.balloon.x = 400;
         this.balloon.y = 400; //330-430
-        this.cretePinkFilter();
         //创建动画实例 手指
         this.fingerAni = new Laya.Animation();
         // 加载动画图集,加载成功后执行回调方法
@@ -45,31 +33,19 @@ var GameMain = /** @class */ (function () {
         //游戏的主要逻辑及绘制
         Laya.timer.frameLoop(1, this, this.onLoop);
     }
-    /**创建黑色滤镜**/
-    GameMain.prototype.creteBlockFilter = function () {
-        //由 20 个项目（排列成 4 x 5 矩阵）组成的数组，黑图
-        var blockMat = [
-            0.216, 0, 0, 0, 0,
-            0.294, 0, 0, 0, 0,
-            0.294, 0, 0, 0, 0,
-            0, 0, 0, 1, 0,
-        ];
-        //创建一个颜色滤镜对象
-        var blockFilter = new Laya.ColorFilter(blockMat);
-        //添加黑色颜色滤镜
-        this.line.filters = [blockFilter];
-    };
-    /**创建粉色滤镜**/
-    GameMain.prototype.cretePinkFilter = function () {
-        var Mat = [
-            0.988, 0, 0, 0, 0,
-            0.541, 0, 0, 0, 0,
-            0.675, 0, 0, 0, 0,
-            0, 0, 0, 1, 0,
-        ];
-        var pinkFilter = new Laya.ColorFilter(Mat);
-        this.balloon.filters = [pinkFilter];
-        this.balloon.alpha = 0.92;
+    GameMain.prototype.onLoaded = function () {
+        //实例一个背景
+        var bg = new Laya.Image();
+        bg.skin = "res/img/sky.png";
+        Laya.stage.addChild(bg);
+        // Laya.stage.bgColor="#c3ebef";
+        //创建循环滚动的line
+        // this.line = new Line();
+        // Laya.stage.addChild(this.line);
+        // this.line.y = 500;
+        // this.line.zOrder = 1; 
+        this.mapLine = new MapLine();
+        Laya.stage.addChild(this.mapLine);
     };
     //手指动画
     GameMain.prototype.onFingerLoaded = function () {
@@ -83,30 +59,25 @@ var GameMain = /** @class */ (function () {
         this.fingerAni.play(0, true, "finger");
     };
     GameMain.prototype.onLoop = function () {
-        console.log(this.balloon.y);
+        // console.log(this.balloon.y);
         this.balloonDown();
-        // if(this.balloon.y >= 330 && this.balloon.y <= 430){
-        //     this.balloonDown();            
-        // }else{
-        //     this.balloonYV = 0;            
-        // }
     };
     //气球运动
     GameMain.prototype.balloonDown = function () {
+        if (this.balloon.y <= 330 && this.balloonYV <= 0) {
+            this.balloonYV += this.gravity;
+            return;
+        }
         this.balloon.y += this.balloonYV;
         this.balloonYV += this.gravity;
-        // this.balloon.skewY = - this.balloonYV; //倾斜
-        // this.balloon.rotation = -0.5 * this.balloonYV; //旋转
-        if (this.balloon.y <= 330) {
-            this.balloonYV = 0;
-        }
         if (this.balloon.y >= 430) {
             this.balloonYV = 0;
         }
+        // this.balloon.skewY = - this.balloonYV; //倾斜
+        // this.balloon.rotation = -0.5 * this.balloonYV; //旋转
     };
     //监听点击事件
     GameMain.prototype.clickHandler = function () {
-        // this.balloon.y -= this.jumpV;
         this.balloonYV -= this.jumpV;
     };
     return GameMain;

@@ -32,6 +32,7 @@ var Balloon = /** @class */ (function (_super) {
         this.bugAni = new Laya.Animation();
         this.bugAni.x = 60;
         this.bugAni.y = -76;
+        this.cretePinkFilter();
     };
     Balloon.prototype.createImg = function (path) {
         var img = new Laya.Sprite();
@@ -44,6 +45,18 @@ var Balloon = /** @class */ (function (_super) {
         this.bugAni.interval = 480;
         this.addChild(this.bugAni);
         this.bugAni.play(0, true, "bug");
+    };
+    /**创建粉色滤镜**/
+    Balloon.prototype.cretePinkFilter = function () {
+        var Mat = [
+            0.988, 0, 0, 0, 0,
+            0.541, 0, 0, 0, 0,
+            0.675, 0, 0, 0, 0,
+            0, 0, 0, 1, 0,
+        ];
+        var pinkFilter = new Laya.ColorFilter(Mat);
+        this.filters = [pinkFilter];
+        this.alpha = 0.92;
     };
     return Balloon;
 }(Laya.Sprite));
