@@ -14,11 +14,12 @@ var MapLine = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         //要移除的地板
         _this.dieLineList = [];
+        _this.type = "line";
         _this.init();
         return _this;
     }
     MapLine.prototype.init = function () {
-        this.addLine(0);
+        this.addLine(this.type, 0);
         this.creteBlockFilter();
         Laya.timer.frameLoop(1, this, this.onLoop);
     };
@@ -30,8 +31,9 @@ var MapLine = /** @class */ (function (_super) {
         }
     };
     //增加line
-    MapLine.prototype.addLine = function (x) {
+    MapLine.prototype.addLine = function (type, x) {
         var line = new Line();
+        line.init(type);
         line.once(Line.OUT_LINE, this, this.getLine);
         line.once(Line.DIE_LINE, this, this.delLine);
         line.x = x;
@@ -40,7 +42,14 @@ var MapLine = /** @class */ (function (_super) {
     // 获取line
     MapLine.prototype.getLine = function (line) {
         var x = line.x + line.width;
-        this.addLine(x);
+        //line和line2交替出现
+        if (this.type == "line") {
+            this.type = "line2";
+        }
+        else if (this.type == "line2") {
+            this.type = "line";
+        }
+        this.addLine(this.type, x);
     };
     //  删除line
     MapLine.prototype.delLine = function (line) {

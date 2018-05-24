@@ -1,6 +1,7 @@
 class MapLine extends Laya.Sprite{
     //要移除的地板
     private dieLineList = [];
+    private type:string = "line";
 
     constructor(){
         super();
@@ -8,7 +9,7 @@ class MapLine extends Laya.Sprite{
     }
 
     init():void{
-        this.addLine(0);
+        this.addLine(this.type,0);
         this.creteBlockFilter();
         Laya.timer.frameLoop(1, this, this.onLoop);
     }
@@ -22,8 +23,9 @@ class MapLine extends Laya.Sprite{
     }
 
     //增加line
-    addLine(x:number):void {
+    addLine(type:string,x:number):void {
         var line = new Line();
+        line.init(type);
         line.once(Line.OUT_LINE, this, this.getLine);
 		line.once(Line.DIE_LINE, this, this.delLine);
         line.x = x;
@@ -32,7 +34,13 @@ class MapLine extends Laya.Sprite{
     // 获取line
     getLine(line):void{
         var x= line.x+line.width;
-		this.addLine(x);
+        //line和line2交替出现
+         if(this.type == "line"){
+            this.type = "line2";
+        }else if(this.type == "line2"){
+            this.type = "line";
+        }
+		this.addLine(this.type,x);
     }
     //  删除line
     delLine(line):void{

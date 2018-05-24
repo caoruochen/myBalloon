@@ -12,6 +12,9 @@ var Balloon = /** @class */ (function (_super) {
     __extends(Balloon, _super);
     function Balloon() {
         var _this = _super.call(this) || this;
+        _this.vy = 0; //初始的y轴速度  
+        _this.gravity = 0.1; //重力加速度  
+        _this.jumpV = 3.8; //跳跃时获得的向上速度
         _this.init();
         return _this;
     }
@@ -28,26 +31,42 @@ var Balloon = /** @class */ (function (_super) {
         var balloon5 = this.createImg("res/img/balloon5.png");
         balloon5.x = 65;
         balloon5.y = 25;
-        Laya.loader.load("res/atlas/bug.atlas", Laya.Handler.create(this, this.onBugLoaded), null, Laya.Loader.ATLAS);
+        // 创建动画模板
+        Laya.Animation.createFrames(["bug/bug1.png", "bug/bug2.png"], "bug");
         this.bugAni = new Laya.Animation();
         this.bugAni.x = 60;
         this.bugAni.y = -76;
-        this.cretePinkFilter();
+        this.bugAni.interval = 480;
+        this.addChild(this.bugAni);
+        //播放动画   
+        this.bugAni.play(0, true, "bug");
+        this.pinkFilter();
+        Laya.timer.frameLoop(1, this, this.onLoop);
     };
+    Balloon.prototype.onLoop = function () {
+        //气球下落
+        this.y += this.vy;
+        this.vy += this.gravity;
+        //实线时 控制下落最大值位置，line的上边
+        // if(this.y >= 430){ //330-430
+        //     this.y = 430
+        // }
+    };
+    //    jump():void{
+    //         this.vy = -10;
+    //     }
+    //  //跳结束重置
+    // jumpReset():void{
+    //     this.vy = 0;
+    // }
     Balloon.prototype.createImg = function (path) {
         var img = new Laya.Sprite();
         img.loadImage(path);
         this.addChild(img);
         return img;
     };
-    Balloon.prototype.onBugLoaded = function () {
-        Laya.Animation.createFrames(["bug/bug1.png", "bug/bug2.png"], "bug");
-        this.bugAni.interval = 480;
-        this.addChild(this.bugAni);
-        this.bugAni.play(0, true, "bug");
-    };
-    /**创建粉色滤镜**/
-    Balloon.prototype.cretePinkFilter = function () {
+    /**添加粉色滤镜**/
+    Balloon.prototype.pinkFilter = function () {
         var Mat = [
             0.988, 0, 0, 0, 0,
             0.541, 0, 0, 0, 0,

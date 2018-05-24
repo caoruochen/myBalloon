@@ -17,28 +17,27 @@ var Line = /** @class */ (function (_super) {
         //背景
         _this.bg = null;
         _this.isOut = false; //右边超出屏幕
-        _this.init();
         return _this;
+        // this.init();
     }
-    Line.prototype.init = function () {
+    Line.prototype.init = function (_type) {
+        this.type = _type;
         //如果不开启autoSize 父容器的宽度和高度无法获取 
         this.autoSize = true;
         this.x = 0;
         this.y = 500;
         if (this.bg == null) {
             //贴图纹理
-            this.bgTexture = Laya.loader.getRes("res/img/line2.png");
+            this.bgTexture = Laya.loader.getRes("res/img/" + _type + ".png");
             this.bg = new Laya.Sprite();
             this.bg.graphics.clear();
             this.addChild(this.bg);
         }
-        // this.bg.graphics.drawTexture(this.bgTexture, 0, 0, 960, 14);
-        //随机一个范围值
+        //随机一个长度的line
         var _w = 87 * (3 + Math.floor(10 * Math.random()));
         this.bg.graphics.clear();
-        console.log(Laya.Texture.createFromTexture(this.bgTexture, 0, 0, _w, 14));
-        //Texture.createFromTexture 是根据宽度和高度来截取一个图片并且返回一个Texture对象
-        this.bg.graphics.drawTexture(Laya.Texture.createFromTexture(this.bgTexture, 0, 0, _w, 14), 0, 0, _w, 14);
+        // this.bg.graphics.drawTexture(this.bgTexture, 0, 0, 960, 14);
+        this.bg.graphics.fillTexture(this.bgTexture, 0, 0, _w, 10);
         Laya.timer.frameLoop(1, this, this.onLoop);
     };
     Line.prototype.onLoop = function () {
