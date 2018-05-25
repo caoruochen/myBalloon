@@ -1,6 +1,8 @@
 // 程序入口
 var GameMain = /** @class */ (function () {
     function GameMain() {
+        this.score = 0;
+        this.foodNun = 0;
         this.balloonYV = 0; //初始的y轴速度  
         this.gravity = 0.1; //重力加速度  
         this.jumpV = 2.5; //跳跃时获得的向上速度
@@ -22,7 +24,10 @@ var GameMain = /** @class */ (function () {
                 url: [
                     "res/img/sky.png",
                     "res/img/line.png",
-                    "res/img/line2.png"
+                    "res/img/line2.png",
+                    "res/img/flag1.png",
+                    "res/img/flag2.png",
+                    "res/img/food.png",
                 ],
                 type: Laya.Loader.IMAGE
             }, {
@@ -33,6 +38,8 @@ var GameMain = /** @class */ (function () {
                 type: Laya.Loader.ATLAS
             }];
         Laya.loader.load(asset, Laya.Handler.create(this, this.onLoaded));
+        Laya.loader.load("balloonPart.part", Laya.Handler.create(this, this.onAssetsLoaded), null, Laya.Loader.JSON);
+        Laya.Stat.show();
     }
     GameMain.prototype.onLoaded = function () {
         //实例一个背景
@@ -43,25 +50,71 @@ var GameMain = /** @class */ (function () {
         //铁丝线
         this.mapLine = new MapLine();
         Laya.stage.addChild(this.mapLine);
+        this.mapLine.zOrder = 1;
         //气球容器对象
         this.balloon = new Balloon();
+        Laya.stage.addChild(this.balloon);
         this.balloon.x = 400;
         this.balloon.y = 400; //330-430
-        Laya.stage.addChild(this.balloon);
+        this.balloon.zOrder = 2;
+        this.addPinkFilter(this.balloon);
+        //气球后面的部分
+        this.balloon1 = new Laya.Sprite();
+        this.balloon1.loadImage("res/img/balloon1.png");
+        Laya.stage.addChild(this.balloon1);
+        this.addPinkFilter(this.balloon1);
+        //小鸟
+        this.bird = new Bird();
+        Laya.stage.addChild(this.bird);
         //手指动画
         this.createfingerAni();
         //监听舞台的点击事件
         Laya.stage.on(Laya.Event.CLICK, this, this.clickHandler);
-        //游戏的主要逻辑及绘制
+        //分数
+        this.scoreTxt = new Laya.Text();
+        this.scoreTxt.text = "0";
+        this.scoreTxt.fontSize = 100;
+        this.scoreTxt.font = "Microsoft YaHei";
+        this.scoreTxt.color = "#7babb4";
+        this.scoreTxt.bold = true; //粗体
+        this.scoreTxt.x = (Laya.stage.width - this.scoreTxt.textWidth) / 2;
+        this.scoreTxt.y = 10;
+        Laya.stage.addChild(this.scoreTxt);
+        //食物数
+        this.foodTxt = new Laya.Text();
+        this.foodTxt.text = "0";
+        //设置宽度，高度自动匹配
+        // this.foodTxt.width = 100;
+        // this.foodTxt.height = 50;
+        // this.foodTxt.align = "center";
+        // this.foodTxt.valign = "moddle";
+        this.foodTxt.fontSize = 40;
+        this.foodTxt.font = "Microsoft YaHei";
+        this.foodTxt.color = "#fff";
+        this.foodTxt.bold = true; //粗体
+        // this.foodTxt.bgColor = "b0d2d8";
+        this.foodTxt.x = Laya.stage.width - this.foodTxt.textWidth - 30;
+        this.foodTxt.y = 10;
+        Laya.stage.addChild(this.foodTxt);
+        var smallFood = new Laya.Sprite;
+        smallFood.loadImage("res/img/food.png");
+        smallFood.scale(0.4, 0.4);
+        smallFood.pos(this.foodTxt.x - 50, this.foodTxt.y + 10);
+        this.addPinkFilter(smallFood);
+        Laya.stage.addChild(smallFood);
         Laya.timer.frameLoop(1, this, this.onLoop);
     };
     GameMain.prototype.onLoop = function () {
         //如果气球碰到带刺铁丝，就把气球销毁,播放销毁动画
         for (var i = this.mapLine.numChildren - 1; i > -1; i--) {
             var line = this.mapLine.getChildAt(i);
-            //气球圈里的上边点，下边点
+            //气球圈里的上边点，下边点 
             if (line.type == "line2" && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 72) || line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 190))) {
-                this.balloon.removeSelf();
+                // this.balloon.removeSelf();
+                // this.balloon.destroy(); 
+                this.balloon.visible = false;
+                // this.balloon.onAssetsLoaded();  
+                // Laya.stage.off(Laya.Event.CLICK, this, this.clickHandler);                              
             }
             //检测气球下落在line上了
             if (line.type == "line" && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 72))) {
@@ -76,10 +129,23 @@ var GameMain = /** @class */ (function () {
                 this.balloon.vy = 0;
             }
         }
+        //小鸟位置跟随balloon
+        if (this.balloon.visible) {
+            this.bird.x = this.balloon.x + 60;
+            this.bird.y = this.balloon.y - 76;
+            this.balloon1.x = this.balloon.x;
+            this.balloon1.y = this.balloon.y + 40;
+        }
+        else {
+            this.bird.x += 2;
+            this.bird.y -= 1;
+            this.balloon1.visible = false;
+        }
     };
     //点击事件
     GameMain.prototype.clickHandler = function () {
         this.balloon.vy = -this.jumpV;
+        this.scoreTxt.text = (++this.score) + "";
     };
     //创建手指动画
     GameMain.prototype.createfingerAni = function () {
@@ -89,9 +155,31 @@ var GameMain = /** @class */ (function () {
         this.fingerAni.interval = 480;
         this.fingerAni.scaleX = 2;
         this.fingerAni.scaleY = 2;
-        this.fingerAni.pos(1000, 600);
+        this.fingerAni.pos(1000, 700);
         Laya.stage.addChild(this.fingerAni);
         this.fingerAni.play(0, true, "finger");
+    };
+    //添加粉色滤镜
+    GameMain.prototype.addPinkFilter = function (me) {
+        var Mat = [
+            0.988, 0, 0, 0, 0,
+            0.541, 0, 0, 0, 0,
+            0.675, 0, 0, 0, 0,
+            0, 0, 0, 1, 0,
+        ];
+        var pinkFilter = new Laya.ColorFilter(Mat);
+        me.filters = [pinkFilter];
+        me.alpha = 0.92;
+    };
+    //粒子特效
+    GameMain.prototype.onAssetsLoaded = function (settings) {
+        console.log(settings);
+        this.sp = new Laya.Particle2D(settings);
+        this.sp.emitter.start();
+        this.sp.play();
+        Laya.stage.addChild(this.sp);
+        this.sp.x = 400;
+        this.sp.y = 400;
     };
     return GameMain;
 }());

@@ -34,10 +34,10 @@ var Line = /** @class */ (function (_super) {
             this.addChild(this.bg);
         }
         //随机一个长度的line
-        var _w = 87 * (3 + Math.floor(10 * Math.random()));
+        var w = 87 * (5 + Math.floor(10 * Math.random()));
         this.bg.graphics.clear();
         // this.bg.graphics.drawTexture(this.bgTexture, 0, 0, 960, 14);
-        this.bg.graphics.fillTexture(this.bgTexture, 0, 0, _w, 10);
+        this.bg.graphics.fillTexture(this.bgTexture, 0, 0, w, 10);
         Laya.timer.frameLoop(1, this, this.onLoop);
     };
     Line.prototype.onLoop = function () {
