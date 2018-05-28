@@ -21,11 +21,13 @@ var Line = /** @class */ (function (_super) {
         // this.init();
     }
     Line.prototype.init = function (_type) {
-        this.type = _type;
+        this.type = _type; //line的类型
+        this.angle = 60 * Math.random() - 30; //line的旋转角度,随机-30~30
+        if (this.type == "line") {
+            this.angle = 0;
+        }
         //如果不开启autoSize 父容器的宽度和高度无法获取 
         this.autoSize = true;
-        this.x = 0;
-        this.y = 500;
         if (this.bg == null) {
             //贴图纹理
             this.bgTexture = Laya.loader.getRes("res/img/" + _type + ".png");
@@ -34,14 +36,16 @@ var Line = /** @class */ (function (_super) {
             this.addChild(this.bg);
         }
         //随机一个长度的line
-        var w = 87 * (5 + Math.floor(10 * Math.random()));
+        // var w = 87 * (5 + Math.floor(10 * Math.random()));
         this.bg.graphics.clear();
-        // this.bg.graphics.drawTexture(this.bgTexture, 0, 0, 960, 14);
-        this.bg.graphics.fillTexture(this.bgTexture, 0, 0, w, 10);
+        this.rotation = this.angle;
+        this.bg.graphics.drawTexture(this.bgTexture, 0, 0, 87, 14);
+        // this.bg.graphics.fillTexture(this.bgTexture, 0, 0, w, 10);
+        this.creteBlockFilter(); //滤镜
         Laya.timer.frameLoop(1, this, this.onLoop);
     };
     Line.prototype.onLoop = function () {
-        this.x -= 1;
+        // this.x -= 1;
         //判断右边是否除了边界 如果出了 就通知生成新的line 这里增加一个变量来判断当前是否已经通知外部了 
         if (!this.isOut && (this.x + this.width) <= 1925) {
             this.isOut = true;
@@ -51,14 +55,29 @@ var Line = /** @class */ (function (_super) {
         else if ((this.x + this.width) < 0) {
             //判断整个line是否不在屏幕里面了 如果不在了 移除当前floor
             Laya.timer.clear(this, this.onLoop);
-            this.visible = false;
+            // this.visible = false;
+            this.destroy();
             this.event(Line.DIE_LINE, this);
         }
+    };
+    /**创建黑色滤镜**/
+    Line.prototype.creteBlockFilter = function () {
+        //由 20 个项目（排列成 4 x 5 矩阵）组成的数组，黑图
+        var blockMat = [
+            0.216, 0, 0, 0, 0,
+            0.294, 0, 0, 0, 0,
+            0.294, 0, 0, 0, 0,
+            0, 0, 0, 1, 0,
+        ];
+        //创建一个颜色滤镜对象
+        var blockFilter = new Laya.ColorFilter(blockMat);
+        //添加颜色滤镜
+        this.filters = [blockFilter];
     };
     //事件名称
     //超过屏幕一定值出发新的floor事件
     Line.OUT_LINE = "out_line";
-    //整个地板都不在屏幕里面事件
+    //整个line都不在屏幕里面事件
     Line.DIE_LINE = "die_line";
     return Line;
 }(Laya.Sprite));
