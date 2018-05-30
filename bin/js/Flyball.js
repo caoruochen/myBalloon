@@ -16,19 +16,29 @@ var Flyball = /** @class */ (function (_super) {
         return _this;
     }
     Flyball.prototype.init = function () {
-        var terminalX = 200;
-        var flyball = this.createFlyball("res/img/flyball.png");
-        // flyball.pivot(46.5, 50);
-        flyball.y = 100;
-        this.graphics.drawLine(terminalX, 0, terminalX, Laya.stage.height, "#FFFFFF");
-        // flyball使用Tween.to缓动
-        Laya.Tween.to(flyball, { x: terminalX }, 1000);
+        // var flyball: Laya.Sprite = this.createFlyball("res/img/flyball.png");
+        // this.createFlyball();
+        var num = 3 + Math.ceil(10 * Math.random());
+        console.log(num);
+        for (var i = 0; i < num; i++) {
+            this.createFlyball();
+            console.log(i);
+        }
     };
-    Flyball.prototype.createFlyball = function (skin) {
-        var character = new Laya.Sprite();
-        character.loadImage(skin);
-        this.addChild(character);
-        return character;
+    Flyball.prototype.createFlyball = function () {
+        var flyball = new Laya.Sprite();
+        flyball.loadImage("res/img/flyball.png");
+        this.addChild(flyball);
+        var terminalY = 500 + Math.ceil(Laya.Browser.clientHeight * Math.random()); //随机位置出现        
+        var x = Math.ceil(Laya.Browser.clientWidth * Math.random());
+        var y = Math.ceil(100 * Math.random());
+        flyball.pos(x, y); //到达的位置， 随机
+        var time = 3000 * Math.ceil(Math.random());
+        // flyball使用Tween.from缓动
+        Laya.Tween.from(flyball, { y: terminalY }, time, null, Laya.Handler.create(this, this.tweenComplete, [flyball]));
+    };
+    Flyball.prototype.tweenComplete = function (flyball) {
+        flyball.destroy();
     };
     return Flyball;
 }(Laya.Sprite));

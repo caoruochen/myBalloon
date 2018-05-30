@@ -97,11 +97,7 @@ var GameMain = /** @class */ (function () {
         smallFood.pos(this.foodTxt.x - 50, this.foodTxt.y + 10);
         this.addPinkFilter(smallFood);
         Laya.stage.addChild(smallFood);
-        //Flyball
-        var flyball = new Flyball();
-        Laya.stage.addChild(flyball);
         Laya.timer.frameLoop(1, this, this.onLoop);
-        console.log(this.mapLine);
     };
     ;
     GameMain.prototype.onPartLoaded = function (settings) {
@@ -137,14 +133,19 @@ var GameMain = /** @class */ (function () {
                 this.balloon.vy = 0;
             }
             //检测气球上升line上了
-            if (line.type == "line" && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 190))) {
-                //如果落到地板了 就把气球的坐标设置到地板上面，重置速度为0
-                this.balloon.y = line.y - 180;
+            if (line.type == "line" && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 185))) {
+                this.balloon.y = line.y - 185 + 14;
                 this.balloon.vy = 0;
             }
+            //检测气球碰到旗子
             if ((line.type == "flag1" || line.type == "flag2") && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 72))) {
-                //设置轴心点
-                line.rotation = 90;
+                line.rotation = 90; //旗子旋转
+                //Flyball 放气球
+                if (line.type == "flag1" && !(line.hit)) {
+                    var flyball = new Flyball();
+                    Laya.stage.addChild(flyball);
+                    line.hit = true;
+                }
             }
         }
         //小鸟位置跟随balloon
@@ -155,8 +156,8 @@ var GameMain = /** @class */ (function () {
             this.balloon1.y = this.balloon.y + 40;
         }
         else {
-            this.bird.x += 2;
-            this.bird.y -= 1;
+            this.bird.x += 4;
+            this.bird.y -= 2;
             this.balloon1.visible = false;
         }
     };
@@ -167,6 +168,8 @@ var GameMain = /** @class */ (function () {
         Laya.timer.once(1500, this, this.stopLoop);
         this.balloon.vy = -this.jumpV;
         this.scoreTxt.text = (++this.score) + "";
+        this.fingerAni.stop();
+        this.fingerAni.visible = false;
     };
     //铁丝移动
     GameMain.prototype.lineLoop = function () {
@@ -178,18 +181,17 @@ var GameMain = /** @class */ (function () {
     //停止铁丝移动
     GameMain.prototype.stopLoop = function () {
         Laya.timer.clear(this, this.lineLoop);
+        this.fingerAni.play();
+        this.fingerAni.visible = true;
     };
     //创建手指动画
     GameMain.prototype.createfingerAni = function () {
-        //创建动画实例 手指
-        Laya.Animation.createFrames(["finger/finger1.png", "finger/finger2.png", "finger/finger3.png", "finger/finger4.png"], "finger");
         this.fingerAni = new Laya.Animation();
-        this.fingerAni.interval = 480;
+        this.fingerAni.loadAnimation("finger.ani");
         this.fingerAni.scaleX = 2;
         this.fingerAni.scaleY = 2;
-        this.fingerAni.pos(1000, 700);
+        this.fingerAni.pos(1100, 1000);
         Laya.stage.addChild(this.fingerAni);
-        this.fingerAni.play(0, true, "finger");
     };
     //添加粉色滤镜
     GameMain.prototype.addPinkFilter = function (me) {

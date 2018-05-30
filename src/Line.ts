@@ -11,16 +11,16 @@ class Line extends Laya.Sprite{
     public static DIE_LINE: string = "die_line";
     //line类型
     public type:string;
-    public angle:number;
+    public angle:number; //旋转角度
     
     constructor(){
         super();
         // this.init();
     }
 
-    public init(_type:string):void{
+    public init(_type:string,maxAng:number):void{
         this.type = _type;//line的类型
-        this.angle = 60 *Math.random() - 30;  //line的旋转角度,随机-30~30
+        this.angle = maxAng * Math.random() ;  //line的旋转角度,随机-30~30
         if(this.type == "line"){
             this.angle = 0; 
         }
@@ -35,7 +35,6 @@ class Line extends Laya.Sprite{
             this.addChild(this.bg);
         }
         //随机一个长度的line
-        // var w = 87 * (5 + Math.floor(10 * Math.random()));
         this.bg.graphics.clear();
         this.rotation=this.angle; 
         this.bg.graphics.drawTexture(this.bgTexture, 0, 0, 87, 14);
@@ -77,5 +76,4 @@ class Line extends Laya.Sprite{
         //添加颜色滤镜
         this.filters = [blockFilter];
     }
-
 }

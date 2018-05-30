@@ -20,9 +20,9 @@ var Line = /** @class */ (function (_super) {
         return _this;
         // this.init();
     }
-    Line.prototype.init = function (_type) {
+    Line.prototype.init = function (_type, maxAng) {
         this.type = _type; //line的类型
-        this.angle = 60 * Math.random() - 30; //line的旋转角度,随机-30~30
+        this.angle = maxAng * Math.random(); //line的旋转角度,随机-30~30
         if (this.type == "line") {
             this.angle = 0;
         }
@@ -36,7 +36,6 @@ var Line = /** @class */ (function (_super) {
             this.addChild(this.bg);
         }
         //随机一个长度的line
-        // var w = 87 * (5 + Math.floor(10 * Math.random()));
         this.bg.graphics.clear();
         this.rotation = this.angle;
         this.bg.graphics.drawTexture(this.bgTexture, 0, 0, 87, 14);

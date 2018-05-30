@@ -10,7 +10,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Balloon = /** @class */ (function (_super) {
     __extends(Balloon, _super);
-    // private sp: Laya.Particle2D;
     function Balloon() {
         var _this = _super.call(this) || this;
         _this.vy = 0; //初始的y轴速度  
@@ -32,10 +31,6 @@ var Balloon = /** @class */ (function (_super) {
         var balloon5 = this.createImg("res/img/balloon5.png");
         balloon5.x = 65;
         balloon5.y = 25;
-        //粉色滤镜
-        // this.pinkFilter();
-        // Laya.loader.load("balloonPart.part", Laya.Handler.create(this, this.onAssetsLoaded), null, Laya.Loader.JSON);
-        // this.onAssetsLoaded();
         Laya.timer.frameLoop(1, this, this.onLoop);
     };
     Balloon.prototype.onLoop = function () {

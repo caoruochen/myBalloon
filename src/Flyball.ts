@@ -1,5 +1,4 @@
 class Flyball extends Laya.Sprite{
-    // private flyball:Laya.Animation;
     private flyball:Laya.Sprite;
 
     constructor(){
@@ -8,20 +7,30 @@ class Flyball extends Laya.Sprite{
     }
 
     init():void{
-        var terminalX: number = 200;
-
-        var flyball: Laya.Sprite = this.createFlyball("res/img/flyball.png");
-        // flyball.pivot(46.5, 50);
-        flyball.y = 100   
-        this.graphics.drawLine(terminalX, 0, terminalX, Laya.stage.height, "#FFFFFF") 
-        // flyball使用Tween.to缓动
-        Laya.Tween.to(flyball, { x: terminalX }, 1000);
+        // var flyball: Laya.Sprite = this.createFlyball("res/img/flyball.png");
+        // this.createFlyball();
+        var num = 3 + Math.ceil(10 * Math.random());
+        console.log(num);        
+        for(var i=0; i<num; i++){
+            this.createFlyball();    
+            console.log(i);        
+        }
     }
 
-    createFlyball(skin: string): Laya.Sprite {
-        var character: Laya.Sprite = new Laya.Sprite();
-        character.loadImage(skin);
-        this.addChild(character);
-        return character;
+    createFlyball(): void {
+        var flyball: Laya.Sprite = new Laya.Sprite();
+        flyball.loadImage("res/img/flyball.png");
+        this.addChild(flyball);
+        var terminalY: number = 500 + Math.ceil(Laya.Browser.clientHeight * Math.random()); //随机位置出现        
+        var x = Math.ceil(Laya.Browser.clientWidth * Math.random());
+        var y = Math.ceil(100 * Math.random());
+        flyball.pos(x,y); //到达的位置， 随机
+        var time = 3000 * Math.ceil(Math.random());
+        // flyball使用Tween.from缓动
+        Laya.Tween.from(flyball, { y: terminalY }, time,null,Laya.Handler.create(this,this.tweenComplete,[flyball]));
+    }
+
+    tweenComplete(flyball):void{
+        flyball.destroy();
     }
 }
