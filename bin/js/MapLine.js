@@ -16,15 +16,15 @@ var MapLine = /** @class */ (function (_super) {
         _this.dieLineList = [];
         _this.type = "line";
         _this.i = 1; //线段编号
-        _this.count = 15;
-        _this.passNum = 10; //关卡，控制难度
+        _this.count = 18;
+        _this.passNum = 0; //关卡，控制难度
         _this.direction = true; //旋转方向
         _this.changeDirArr = []; //记录要转换节点的下标
         _this.init();
         return _this;
     }
     MapLine.prototype.init = function () {
-        this.addLine(this.type, 0, 500, 1);
+        this.addLine(this.type, 0, Laya.stage.height / 2 - 200, true); //线段初始位置
         Laya.timer.frameLoop(1, this, this.onLoop);
     };
     MapLine.prototype.onLoop = function () {
@@ -61,24 +61,36 @@ var MapLine = /** @class */ (function (_super) {
             //改变铁丝类型
             this.type = this.type == "line" ? "line2" : "line";
             if (this.type == "line2") {
-                this.count = 5 + Math.ceil(10 * Math.random()) + this.passNum; //控制难度2：带刺线段数，随关数增加 
+                this.count = 5 + Math.ceil(8 * Math.random()) + this.passNum; //控制难度2：带刺线段数，随关数增加 
                 //开始位置在中间下面，则旋转角度为负
                 y > Laya.stage.height / 2 ? this.direction = false : this.direction = true;
             }
             else {
-                this.count = 5;
+                this.count = 8;
             }
             this.changeDirArr = [];
-            var n = 2; //控制难度3：取n个节点位置转换方向                
+            var n; //控制难度3：取n个节点位置转换方向  
+            if (this.passNum < 5) {
+                n = 0;
+            }
+            else if (this.passNum < 10) {
+                n = 1;
+            }
+            else if (this.passNum < 20) {
+                n = 2;
+            }
+            else if (this.passNum < 30) {
+                n = 3;
+            }
+            else {
+                n = 4;
+            }
             for (var i = 0; i < n; i++) { //取n次
                 var index = Math.ceil(this.count * Math.random());
                 this.changeDirArr.push(index);
             }
         }
         //随机在第n个地方转换方向
-        if (this.i == 10 || this.i == 20) {
-            this.direction = !this.direction;
-        }
         //在changeDirArr记录位置转变方向
         for (var i = 0; i < this.changeDirArr.length; i++) {
             if (this.i == this.changeDirArr[i])
@@ -87,7 +99,6 @@ var MapLine = /** @class */ (function (_super) {
         if (y < 100 || y > Laya.stage.height - 100) { //到顶,底后 转变旋转方向
             this.direction = !this.direction;
         }
-        // console.log(this.count)
         //旗子 出现在直线上
         if (this.type == "line" && (this.i == 2 || this.i == this.count - 1)) {
             var name = this.i == 2 ? "flag1" : "flag2";

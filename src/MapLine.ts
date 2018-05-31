@@ -3,9 +3,9 @@ class MapLine extends Laya.Sprite{
     private dieLineList = [];
     private type:string = "line";
     private i:number = 1; //线段编号
-    private count:number = 5;
+    private count:number = 18;
     private flag:Laya.Sprite;
-    public passNum:number = 10;//关卡，控制难度
+    public passNum:number = 0;//关卡，控制难度
     public direction:boolean = true;//旋转方向
     public changeDirArr = []; //记录要转换节点的下标
 
@@ -15,7 +15,7 @@ class MapLine extends Laya.Sprite{
     }
 
     init():void{
-        this.addLine(this.type,0,500,1);
+        this.addLine(this.type,0,Laya.stage.height/2-200,true); //线段初始位置
         Laya.timer.frameLoop(1, this, this.onLoop);
     }
 
@@ -54,24 +54,33 @@ class MapLine extends Laya.Sprite{
             //改变铁丝类型
             this.type = this.type == "line" ? "line2" : "line"; 
             if(this.type == "line2"){
-                this.count = 5 + Math.ceil( 10 *Math.random()) + this.passNum; //控制难度2：带刺线段数，随关数增加 
+                this.count = 5 + Math.ceil( 8 *Math.random()) + this.passNum; //控制难度2：带刺线段数，随关数增加 
                 //开始位置在中间下面，则旋转角度为负
                 y>Laya.stage.height/2 ? this.direction = false : this.direction = true;
             }else{
-                this.count = 5;
+                this.count = 8;
             }
 
             this.changeDirArr = [];        
-            var n = 2; //控制难度3：取n个节点位置转换方向                
+            var n; //控制难度3：取n个节点位置转换方向  
+            if(this.passNum < 5){
+                n=0
+            }else if(this.passNum < 10){
+                n=1
+            }else if(this.passNum < 20){
+                n=2
+            }else if(this.passNum < 30){
+                n=3
+            }else{
+                n=4
+            }
+            
             for(var i = 0; i<n; i++){ //取n次
                 var index = Math.ceil(this.count * Math.random());
                 this.changeDirArr.push(index);
             }
         }
         //随机在第n个地方转换方向
-        if(this.i == 10 || this.i ==20){
-            this.direction = !this.direction;
-        } 
         //在changeDirArr记录位置转变方向
         for(var i = 0; i<this.changeDirArr.length; i++){
             if(this.i == this.changeDirArr[i]) this.direction = !this.direction;                  
@@ -82,7 +91,6 @@ class MapLine extends Laya.Sprite{
         }
 
 
-        // console.log(this.count)
         //旗子 出现在直线上
         if(this.type=="line" && (this.i == 2 || this.i == this.count-1)){
             var name = this.i == 2 ? "flag1" : "flag2";    

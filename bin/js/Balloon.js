@@ -10,11 +10,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Balloon = /** @class */ (function (_super) {
     __extends(Balloon, _super);
+    // private jumpV:number = 3.8;     //跳跃时获得的向上速度
     function Balloon() {
         var _this = _super.call(this) || this;
         _this.vy = 0; //初始的y轴速度  
-        _this.gravity = 0.1; //重力加速度  
-        _this.jumpV = 3.8; //跳跃时获得的向上速度
+        _this.gravity = 0.08; //重力加速度  
         _this.init();
         return _this;
     }

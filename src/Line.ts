@@ -47,7 +47,7 @@ class Line extends Laya.Sprite{
         // this.x -= 1;
 
         //判断右边是否除了边界 如果出了 就通知生成新的line 这里增加一个变量来判断当前是否已经通知外部了 
-        if(!this.isOut && (this.x + this.width) <= 1925){
+        if(!this.isOut && (this.x + this.width) <= Laya.stage.width){
             this.isOut = true;
             this.event(Line.OUT_LINE, this);
             // console.log(this.x + this.width);

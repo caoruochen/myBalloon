@@ -1,8 +1,8 @@
 class Balloon extends Laya.Sprite{
     
     private vy:number = 0;   //初始的y轴速度  
-    private gravity:number = 0.1;    //重力加速度  
-    private jumpV:number = 3.8;     //跳跃时获得的向上速度
+    private gravity:number = 0.08;    //重力加速度  
+    // private jumpV:number = 3.8;     //跳跃时获得的向上速度
 
     constructor(){
         super();
