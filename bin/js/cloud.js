@@ -10,21 +10,22 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Cloud = /** @class */ (function (_super) {
     __extends(Cloud, _super);
-    // private cloud
     function Cloud() {
         var _this = _super.call(this) || this;
         _this.init();
         return _this;
     }
     Cloud.prototype.init = function () {
-        var cloud;
-        cloud = new Laya.Sprite();
-        cloud.loadImage("res/img/cloud.png");
-        cloud.scale(10, 10);
-        cloud.alpha = 0.6;
-        // this.cloud.y = 500;
-        cloud.zOrder = 3;
-        Laya.stage.addChild(cloud);
+        var randomY = 500 * Math.random();
+        this.cloud = new Laya.Sprite();
+        // cloud.loadImage("res/img/cloud.png");
+        var texture = Laya.loader.getRes("res/img/cloud.png");
+        this.cloud.graphics.drawTexture(texture, 0, 0);
+        this.cloud.scale(10, 10);
+        this.cloud.alpha = 0.6;
+        this.cloud.y = randomY;
+        this.addChild(this.cloud);
+        // Laya.timer.frameLoop(1,this,this.onLoad);
     };
     return Cloud;
 }(Laya.Sprite));

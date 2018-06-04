@@ -33,6 +33,7 @@ var MapLine = /** @class */ (function (_super) {
             var line = this.dieLineList.shift();
             line.removeSelf();
             // line.destory();
+            Laya.Pool.recover("line", line); //放到对象池中
         }
     };
     //增加line
@@ -42,7 +43,8 @@ var MapLine = /** @class */ (function (_super) {
             maxAng = 30; //最大变化角度是30， -30~30
         if (!direction)
             maxAng = -maxAng; //旋转的方向
-        var line = new Line();
+        // var line = new Line();
+        var line = Laya.Pool.getItemByClass("line", Line);
         line.init(type, maxAng);
         line.once(Line.OUT_LINE, this, this.getLine); //监听是否要生成一个新的line
         line.once(Line.DIE_LINE, this, this.delLine); //监听是否要移除line
@@ -110,10 +112,8 @@ var MapLine = /** @class */ (function (_super) {
                 this.flag.zOrder = 1;
                 this.addChild(this.flag);
             }
-            if (name == "flag2") {
+            if (name == "flag2")
                 this.passNum += 1;
-            }
-            ;
         }
         this.i++;
         this.addLine(this.type, x, y, this.direction);
@@ -124,4 +124,5 @@ var MapLine = /** @class */ (function (_super) {
     };
     return MapLine;
 }(Laya.Sprite));
+// export default MapLine;
 //# sourceMappingURL=MapLine.js.map

@@ -7,9 +7,7 @@ class Flyball extends Laya.Sprite{
     }
 
     init():void{
-        // var flyball: Laya.Sprite = this.createFlyball("res/img/flyball.png");
-        // this.createFlyball();
-        var num = 4 + Math.ceil(6 * Math.random());
+        var num = 5 + Math.ceil(5 * Math.random());
         for(var i=0; i<num; i++){
             this.createFlyball();    
         }
@@ -19,16 +17,32 @@ class Flyball extends Laya.Sprite{
         var flyball: Laya.Sprite = new Laya.Sprite();
         flyball.loadImage("res/img/flyball.png");
         this.addChild(flyball);
-        var terminalY: number = Laya.stage.height - Math.ceil( 800 * Math.random()); //随机位置出现        
+        var terminalY: number = 600 + Math.ceil(  800 * Math.random()); //随机位置出现        
         var x = Math.ceil(Laya.stage.width * Math.random());
         var y = Math.ceil(500 * Math.random());
         flyball.pos(x,y); //到达的位置， 随机
-        var time = 5000 * Math.ceil(Math.random());
+        var time = 3000 * Math.ceil(Math.random());
+        this.addYellowFilter(flyball);
         // flyball使用Tween.from缓动
         Laya.Tween.from(flyball, { y: terminalY }, time,null,Laya.Handler.create(this,this.tweenComplete,[flyball]));
     }
 
     tweenComplete(flyball):void{
         flyball.destroy();
+    }
+
+    //添加滤镜
+    addYellowFilter(me):void{
+        var g = Math.random() * 0.7 + 0.3;
+		var Mat = 
+        [
+				1, 0, 0, 0, 0, //R
+				g, 0, 0, 0, 0, //G 0.3-1
+				0, 0, 0, 0, 0, //B
+				0, 0, 0, 1, 0, //A
+		];
+		var Filter = new Laya.ColorFilter(Mat);
+        me.filters = [Filter];
+        me.alpha = 0.6;
     }
 }

@@ -2,26 +2,23 @@
 var GameMain = /** @class */ (function () {
     function GameMain() {
         this.score = 0;
-        this.foodNun = 0;
-        // private balloonYV:number = 0;   //初始的y轴速度  
-        // private gravity:number = 0.1;    //重力加速度  
-        this.jumpV = 1.4; //跳跃时获得的向上速度
+        this.level = 0;
+        this.step = 0;
+        this.jumpV = 1.6; //跳跃时获得的向上速度
         this.f = true; //气球旋转方向
         this.W = 955;
         this.H = 1925;
         //TS或JS版本初始化微信小游戏的适配
         Laya.MiniAdpter.init();
         //初始化引擎，背景图宽高
-        Laya.init(955, 1925, Laya.WebGL);
+        Laya.init(this.W, this.H, Laya.WebGL);
         // console.log(Laya.Browser.clientWidth, Laya.Browser.clientHeight);
-        //设置适配模式,最小比例缩放
+        //设置适配模式
         Laya.stage.scaleMode = "showall";
-        //设置水平对齐
+        //设置居中对齐
         Laya.stage.alignH = "center";
-        //设置垂直对齐
-        Laya.stage.alignV = "middle";
-        //设置竖屏
-        Laya.stage.screenMode = "horizontal";
+        //设置横竖屏
+        Laya.stage.screenMode = "vertical";
         //加载资源
         var asset = [{
                 url: [
@@ -54,15 +51,10 @@ var GameMain = /** @class */ (function () {
         bg.pos(955, 0);
         Laya.stage.addChild(bg);
         //白云
-        // this.cloud = new Laya.Sprite();
-        // this.cloud.loadImage("res/img/cloud.png");
-        // this.cloud.scale(10,10);
-        // this.cloud.alpha = 0.6;
-        // // this.cloud.y = 500;
-        // this.cloud.zOrder = 3;
-        // Laya.stage.addChild(this.cloud);
         this.cloud = new Cloud();
-        console.log(this.cloud);
+        this.cloud.pos(0, 0);
+        this.cloud.zOrder = 3;
+        Laya.stage.addChild(this.cloud);
         //铁丝线
         this.mapLine = new MapLine();
         Laya.stage.addChild(this.mapLine);
@@ -87,49 +79,17 @@ var GameMain = /** @class */ (function () {
         //监听舞台的点击事件
         Laya.stage.on(Laya.Event.CLICK, this, this.clickHandler);
         //分数
-        this.scoreTxt = new Laya.Text();
-        this.scoreTxt.text = "0";
-        this.scoreTxt.fontSize = 100;
-        this.scoreTxt.font = "Microsoft YaHei";
-        this.scoreTxt.color = "#7babb4";
-        this.scoreTxt.bold = true; //粗体
-        this.scoreTxt.x = (this.W - this.scoreTxt.textWidth) / 2;
-        this.scoreTxt.y = 10;
-        Laya.stage.addChild(this.scoreTxt);
-        //食物数
-        this.foodTxt = new Laya.Text();
-        this.foodTxt.text = "0";
-        this.foodTxt.fontSize = 40;
-        this.foodTxt.font = "Microsoft YaHei";
-        this.foodTxt.color = "#fff";
-        this.foodTxt.bold = true; //粗体
-        // this.foodTxt.bgColor = "b0d2d8";
-        this.foodTxt.x = this.W - this.foodTxt.textWidth - 30;
-        this.foodTxt.y = 10;
-        Laya.stage.addChild(this.foodTxt);
-        var smallFood = new Laya.Sprite;
-        smallFood.loadImage("res/img/food.png");
-        smallFood.scale(0.4, 0.4);
-        smallFood.pos(this.foodTxt.x - 50, this.foodTxt.y + 10);
-        this.addPinkFilter(smallFood);
-        Laya.stage.addChild(smallFood);
+        this.mapScore = new Score();
+        Laya.stage.addChild(this.mapScore);
+        this.addPinkFilter(this.mapScore.smallFood);
         Laya.timer.frameLoop(1, this, this.onLoop);
     };
     ;
-    GameMain.prototype.onPartLoaded = function (settings) {
-        // 粒子
-        this.sp = new Laya.Particle2D(settings);
-        this.sp.autoPlay = false;
-        Laya.stage.addChild(this.sp);
-        this.sp.emitter.clear();
-        // this.sp.emitter.start();        
-        // this.sp.play();       
-        this.sp.zOrder = 1;
-    };
     GameMain.prototype.onLoop = function () {
-        //如果气球碰到带刺铁丝，就把气球销毁,播放销毁动画
+        //碰撞检测
         for (var i = this.mapLine.numChildren - 1; i > -1; i--) {
             var line = this.mapLine.getChildAt(i);
+            //如果气球碰到带刺铁丝，就把气球销毁,播放销毁动画
             //气球圈里的上边点，下边点 
             if (line.type == "line2" && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 70) || line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 190))) {
                 // this.balloon.removeSelf(); //将自身从父节点移除
@@ -154,13 +114,16 @@ var GameMain = /** @class */ (function () {
                 this.balloon.vy = 0;
             }
             //检测气球碰到旗子
-            if ((line.type == "flag1" || line.type == "flag2") && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 72))) {
+            if ((line.type == "flag1" || line.type == "flag2") && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 90))) {
                 line.rotation = 90; //旗子旋转
                 //Flyball 放气球
                 if (line.type == "flag1" && !(line.hit)) {
                     var flyball = new Flyball();
                     Laya.stage.addChild(flyball);
                     line.hit = true;
+                    this.level += 1;
+                    this.mapScore.levelTxt.text = this.level;
+                    this.step = this.score; //记录一关开始时的步数
                 }
             }
         }
@@ -181,9 +144,9 @@ var GameMain = /** @class */ (function () {
     GameMain.prototype.clickHandler = function () {
         Laya.timer.clear(this, this.stopLoop);
         Laya.timer.frameLoop(1, this, this.lineLoop);
-        Laya.timer.once(1500, this, this.stopLoop);
+        Laya.timer.once(1200, this, this.stopLoop);
         this.balloon.vy = -this.jumpV;
-        this.scoreTxt.text = (++this.score) + "";
+        this.mapScore.scoreTxt.text = (++this.score) + "";
         this.fingerAni.stop();
         this.fingerAni.visible = false;
     };
@@ -208,14 +171,28 @@ var GameMain = /** @class */ (function () {
             this.balloon1.rotation -= 1 / 5;
         }
         //白云移动
-        this.cloud._x -= 1;
-        console.log(this.cloud.x);
+        this.cloud.x -= 1;
+        var child = this.cloud.getChildAt(0);
+        if (child.x + this.cloud.x < -1000) {
+            child.x += 1000 + Laya.stage.width;
+            child.y = 300 * Math.random();
+        }
     };
     //停止铁丝移动
     GameMain.prototype.stopLoop = function () {
         Laya.timer.clear(this, this.lineLoop);
         this.fingerAni.play();
         this.fingerAni.visible = true;
+    };
+    GameMain.prototype.onPartLoaded = function (settings) {
+        // 粒子
+        this.sp = new Laya.Particle2D(settings);
+        this.sp.autoPlay = false;
+        Laya.stage.addChild(this.sp);
+        this.sp.emitter.clear();
+        // this.sp.emitter.start();        
+        // this.sp.play();       
+        this.sp.zOrder = 1;
     };
     //创建手指动画
     GameMain.prototype.createfingerAni = function () {

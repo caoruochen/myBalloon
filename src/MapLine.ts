@@ -25,6 +25,7 @@ class MapLine extends Laya.Sprite{
             var line = this.dieLineList.shift();
             line.removeSelf();
             // line.destory();
+            Laya.Pool.recover("line",line); //放到对象池中
         }
     }
 
@@ -34,7 +35,8 @@ class MapLine extends Laya.Sprite{
         if(maxAng >= 30) maxAng = 30 ; //最大变化角度是30， -30~30
         if(!direction) maxAng = -maxAng; //旋转的方向
 
-        var line = new Line();
+        // var line = new Line();
+        var line = Laya.Pool.getItemByClass("line",Line);
         line.init(type,maxAng);
         line.once(Line.OUT_LINE, this, this.getLine); //监听是否要生成一个新的line
 		line.once(Line.DIE_LINE, this, this.delLine); //监听是否要移除line
@@ -102,9 +104,7 @@ class MapLine extends Laya.Sprite{
                 this.flag.zOrder = 1;     
                 this.addChild(this.flag);
             }        
-            if(name == "flag2"){
-                this.passNum += 1;
-            }; 
+            if(name == "flag2") this.passNum += 1;            
         }
 
         this.i ++;        
@@ -116,3 +116,5 @@ class MapLine extends Laya.Sprite{
     }
     
 }
+
+// export default MapLine;

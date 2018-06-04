@@ -37,10 +37,6 @@ var Balloon = /** @class */ (function (_super) {
         //气球下落
         this.y += this.vy;
         this.vy += this.gravity;
-        //实线时 控制下落最大值位置，line的上边
-        // if(this.y >= 430){ //330-430
-        //     this.y = 430
-        // }
     };
     Balloon.prototype.createImg = function (path) {
         var img = new Laya.Sprite();
