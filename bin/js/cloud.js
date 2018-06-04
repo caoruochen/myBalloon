@@ -18,7 +18,6 @@ var Cloud = /** @class */ (function (_super) {
     Cloud.prototype.init = function () {
         var randomY = 500 * Math.random();
         this.cloud = new Laya.Sprite();
-        // cloud.loadImage("res/img/cloud.png");
         var texture = Laya.loader.getRes("res/img/cloud.png");
         this.cloud.graphics.drawTexture(texture, 0, 0);
         this.cloud.scale(10, 10);

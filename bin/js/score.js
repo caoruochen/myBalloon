@@ -57,7 +57,18 @@ var Score = /** @class */ (function (_super) {
         this.levelTxt.x = this.king.x + 50;
         this.levelTxt.y = 140;
         this.addChild(this.levelTxt);
+        //gameover
+        this.gameoverTxt = new Laya.Text();
+        this.gameoverTxt.text = "Game Over !\n点击继续游戏";
+        this.gameoverTxt.fontSize = 90;
+        this.gameoverTxt.font = "Microsoft YaHei";
+        this.gameoverTxt.color = "#7babb4";
+        this.gameoverTxt.bold = true; //粗体
+        this.gameoverTxt.x = (Laya.stage.width - this.gameoverTxt.textWidth) / 2;
+        this.gameoverTxt.y = Laya.stage.height / 2 - 100;
+        this.gameoverTxt.visible = false;
+        this.addChild(this.gameoverTxt);
     };
     return Score;
 }(Laya.Sprite));
-//# sourceMappingURL=score.js.map
+//# sourceMappingURL=Score.js.map

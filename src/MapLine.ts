@@ -3,18 +3,19 @@ class MapLine extends Laya.Sprite{
     private dieLineList = [];
     private type:string = "line";
     private i:number = 1; //线段编号
-    private count:number = 18;
-    private flag:Laya.Sprite;
+    private count:number = 15;
+    private flag:Flag;
     public passNum:number = 0;//关卡，控制难度
     public direction:boolean = true;//旋转方向
     public changeDirArr = []; //记录要转换节点的下标
 
     constructor(){
         super();
-        this.init();
+        // this.init();
     }
 
-    init():void{
+    public init(passNum:number):void{
+        this.passNum = passNum;
         this.addLine(this.type,0,Laya.stage.height/2-200,true); //线段初始位置
         Laya.timer.frameLoop(1, this, this.onLoop);
     }
@@ -24,7 +25,6 @@ class MapLine extends Laya.Sprite{
         while(this.dieLineList.length > 0){
             var line = this.dieLineList.shift();
             line.removeSelf();
-            // line.destory();
             Laya.Pool.recover("line",line); //放到对象池中
         }
     }
@@ -116,5 +116,3 @@ class MapLine extends Laya.Sprite{
     }
     
 }
-
-// export default MapLine;

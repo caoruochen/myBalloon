@@ -16,14 +16,15 @@ var MapLine = /** @class */ (function (_super) {
         _this.dieLineList = [];
         _this.type = "line";
         _this.i = 1; //线段编号
-        _this.count = 18;
+        _this.count = 15;
         _this.passNum = 0; //关卡，控制难度
         _this.direction = true; //旋转方向
         _this.changeDirArr = []; //记录要转换节点的下标
-        _this.init();
         return _this;
+        // this.init();
     }
-    MapLine.prototype.init = function () {
+    MapLine.prototype.init = function (passNum) {
+        this.passNum = passNum;
         this.addLine(this.type, 0, Laya.stage.height / 2 - 200, true); //线段初始位置
         Laya.timer.frameLoop(1, this, this.onLoop);
     };
@@ -32,7 +33,6 @@ var MapLine = /** @class */ (function (_super) {
         while (this.dieLineList.length > 0) {
             var line = this.dieLineList.shift();
             line.removeSelf();
-            // line.destory();
             Laya.Pool.recover("line", line); //放到对象池中
         }
     };
@@ -124,5 +124,4 @@ var MapLine = /** @class */ (function (_super) {
     };
     return MapLine;
 }(Laya.Sprite));
-// export default MapLine;
 //# sourceMappingURL=MapLine.js.map

@@ -1,3 +1,8 @@
+// import Cloud from "./Cloud";
+// import MapLine from "./MapLine";
+// import Balloon from "./Balloon";
+// import Bird from "./Bird";
+// import Score from "./Score";
 // 程序入口
 var GameMain = /** @class */ (function () {
     function GameMain() {
@@ -55,8 +60,29 @@ var GameMain = /** @class */ (function () {
         this.cloud.pos(0, 0);
         this.cloud.zOrder = 3;
         Laya.stage.addChild(this.cloud);
+        //手指动画
+        this.createfingerAni();
+        this.fingerAni.play();
+        //分数
+        this.mapScore = new Score();
+        Laya.stage.addChild(this.mapScore);
+        this.addPinkFilter(this.mapScore.smallFood);
+        this.restart();
+    };
+    ;
+    GameMain.prototype.restart = function () {
+        //清除铁丝
+        if (this.mapLine) {
+            Laya.timer.clear(this, this.onLoop);
+            this.mapLine.destroy();
+            this.bird.destroy();
+            this.mapScore.gameoverTxt.visible = false;
+        }
+        ;
+        this.score = this.step;
         //铁丝线
         this.mapLine = new MapLine();
+        this.mapLine.init(this.level);
         Laya.stage.addChild(this.mapLine);
         this.mapLine.zOrder = 1;
         //气球容器对象
@@ -73,18 +99,10 @@ var GameMain = /** @class */ (function () {
         //小鸟
         this.bird = new Bird();
         Laya.stage.addChild(this.bird);
-        //手指动画
-        this.createfingerAni();
-        this.fingerAni.play();
         //监听舞台的点击事件
         Laya.stage.on(Laya.Event.CLICK, this, this.clickHandler);
-        //分数
-        this.mapScore = new Score();
-        Laya.stage.addChild(this.mapScore);
-        this.addPinkFilter(this.mapScore.smallFood);
         Laya.timer.frameLoop(1, this, this.onLoop);
     };
-    ;
     GameMain.prototype.onLoop = function () {
         //碰撞检测
         for (var i = this.mapLine.numChildren - 1; i > -1; i--) {
@@ -101,6 +119,10 @@ var GameMain = /** @class */ (function () {
                 this.sp.y = this.balloon.y + 50;
                 this.sp.emitter.start();
                 Laya.timer.frameOnce(5, this, function () { this.sp.emitter.stop(); });
+                //gameover
+                this.mapScore.gameoverTxt.visible = true;
+                //注册舞台点击事件，点击重新开始游戏
+                this.mapScore.gameoverTxt.once(Laya.Event.CLICK, this, this.restart);
             }
             //检测气球下落在line上了
             if (line.type == "line" && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 72))) {
@@ -114,7 +136,7 @@ var GameMain = /** @class */ (function () {
                 this.balloon.vy = 0;
             }
             //检测气球碰到旗子
-            if ((line.type == "flag1" || line.type == "flag2") && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 90))) {
+            if ((line.type == "flag1" || line.type == "flag2") && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 80))) {
                 line.rotation = 90; //旗子旋转
                 //Flyball 放气球
                 if (line.type == "flag1" && !(line.hit)) {
@@ -122,7 +144,7 @@ var GameMain = /** @class */ (function () {
                     Laya.stage.addChild(flyball);
                     line.hit = true;
                     this.level += 1;
-                    this.mapScore.levelTxt.text = this.level;
+                    this.mapScore.levelTxt.text = '' + this.level;
                     this.step = this.score; //记录一关开始时的步数
                 }
             }
