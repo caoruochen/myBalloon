@@ -53367,44 +53367,48 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Balloon = /** @class */ (function (_super) {
-    __extends(Balloon, _super);
-    // private jumpV:number = 3.8;     //跳跃时获得的向上速度
-    function Balloon() {
-        var _this = _super.call(this) || this;
-        _this.vy = 0; //初始的y轴速度  
-        _this.gravity = 0.08; //重力加速度  
-        _this.init();
-        return _this;
-    }
-    Balloon.prototype.init = function () {
-        // var balloon1 : Laya.Sprite = this.createImg("res/img/balloon1.png");
-        // balloon1.y = 40;
-        var balloon2 = this.createImg("res/img/balloon2.png");
-        balloon2.x = 64;
-        balloon2.y = 40;
-        var balloon3 = this.createImg("res/img/balloon3.png");
-        balloon3.x = 70;
-        var balloon4 = this.createImg("res/img/balloon4.png");
-        balloon4.x = 35;
-        var balloon5 = this.createImg("res/img/balloon5.png");
-        balloon5.x = 65;
-        balloon5.y = 25;
-        Laya.timer.frameLoop(1, this, this.onLoop);
-    };
-    Balloon.prototype.onLoop = function () {
-        //气球下落
-        this.y += this.vy;
-        this.vy += this.gravity;
-    };
-    Balloon.prototype.createImg = function (path) {
-        var img = new Laya.Sprite();
-        img.loadImage(path);
-        this.addChild(img);
-        return img;
-    };
-    return Balloon;
-}(Laya.Sprite));
+var balloon;
+(function (balloon) {
+    var Balloon = /** @class */ (function (_super) {
+        __extends(Balloon, _super);
+        // private jumpV:number = 3.8;     //跳跃时获得的向上速度
+        function Balloon() {
+            var _this = _super.call(this) || this;
+            _this.vy = 0; //初始的y轴速度  
+            _this.gravity = 0.08; //重力加速度  
+            _this.init();
+            return _this;
+        }
+        Balloon.prototype.init = function () {
+            // var balloon1 : Laya.Sprite = this.createImg("res/img/balloon1.png");
+            // balloon1.y = 40;
+            var balloon2 = this.createImg("res/img/balloon2.png");
+            balloon2.x = 64;
+            balloon2.y = 40;
+            var balloon3 = this.createImg("res/img/balloon3.png");
+            balloon3.x = 70;
+            var balloon4 = this.createImg("res/img/balloon4.png");
+            balloon4.x = 35;
+            var balloon5 = this.createImg("res/img/balloon5.png");
+            balloon5.x = 65;
+            balloon5.y = 25;
+            Laya.timer.frameLoop(1, this, this.onLoop);
+        };
+        Balloon.prototype.onLoop = function () {
+            //气球下落
+            this.y += this.vy;
+            this.vy += this.gravity;
+        };
+        Balloon.prototype.createImg = function (path) {
+            var img = new Laya.Sprite();
+            img.loadImage(path);
+            this.addChild(img);
+            return img;
+        };
+        return Balloon;
+    }(Laya.Sprite));
+    balloon.Balloon = Balloon;
+})(balloon || (balloon = {}));
 //# sourceMappingURL=Balloon.js.map
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -53416,26 +53420,30 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Bird = /** @class */ (function (_super) {
-    __extends(Bird, _super);
-    function Bird() {
-        var _this = _super.call(this) || this;
-        _this.init();
-        return _this;
-    }
-    Bird.prototype.init = function () {
-        // 创建动画模板
-        Laya.Animation.createFrames(["bug/bug1.png", "bug/bug2.png"], "bug");
-        this.birdAni = new Laya.Animation();
-        // this.birdAni.x = 60;
-        // this.birdAni.y = -76;
-        this.birdAni.interval = 480;
-        this.addChild(this.birdAni);
-        //播放动画   
-        this.birdAni.play(0, true, "bug");
-    };
-    return Bird;
-}(Laya.Sprite));
+var bird;
+(function (bird) {
+    var Bird = /** @class */ (function (_super) {
+        __extends(Bird, _super);
+        function Bird() {
+            var _this = _super.call(this) || this;
+            _this.init();
+            return _this;
+        }
+        Bird.prototype.init = function () {
+            // 创建动画模板
+            Laya.Animation.createFrames(["bug/bug1.png", "bug/bug2.png"], "bug");
+            this.birdAni = new Laya.Animation();
+            // this.birdAni.x = 60;
+            // this.birdAni.y = -76;
+            this.birdAni.interval = 480;
+            this.addChild(this.birdAni);
+            //播放动画   
+            this.birdAni.play(0, true, "bug");
+        };
+        return Bird;
+    }(Laya.Sprite));
+    bird.Bird = Bird;
+})(bird || (bird = {}));
 //# sourceMappingURL=Bird.js.map
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -53447,26 +53455,30 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Cloud = /** @class */ (function (_super) {
-    __extends(Cloud, _super);
-    function Cloud() {
-        var _this = _super.call(this) || this;
-        _this.init();
-        return _this;
-    }
-    Cloud.prototype.init = function () {
-        var randomY = 500 * Math.random();
-        this.cloud = new Laya.Sprite();
-        var texture = Laya.loader.getRes("res/img/cloud.png");
-        this.cloud.graphics.drawTexture(texture, 0, 0);
-        this.cloud.scale(10, 10);
-        this.cloud.alpha = 0.6;
-        this.cloud.y = randomY;
-        this.addChild(this.cloud);
-        // Laya.timer.frameLoop(1,this,this.onLoad);
-    };
-    return Cloud;
-}(Laya.Sprite));
+var cloud;
+(function (cloud) {
+    var Cloud = /** @class */ (function (_super) {
+        __extends(Cloud, _super);
+        function Cloud() {
+            var _this = _super.call(this) || this;
+            _this.init();
+            return _this;
+        }
+        Cloud.prototype.init = function () {
+            var randomY = 500 * Math.random();
+            this.cloud = new Laya.Sprite();
+            var texture = Laya.loader.getRes("res/img/cloud.png");
+            this.cloud.graphics.drawTexture(texture, 0, 0);
+            this.cloud.scale(10, 10);
+            this.cloud.alpha = 0.6;
+            this.cloud.y = randomY;
+            this.addChild(this.cloud);
+            // Laya.timer.frameLoop(1,this,this.onLoad);
+        };
+        return Cloud;
+    }(Laya.Sprite));
+    cloud.Cloud = Cloud;
+})(cloud || (cloud = {}));
 //# sourceMappingURL=Cloud.js.map
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -53478,40 +53490,44 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Flag = /** @class */ (function (_super) {
-    __extends(Flag, _super);
-    function Flag() {
-        var _this = _super.call(this) || this;
-        //背景贴图纹理
-        _this.bgTexture = null;
-        //背景
-        _this.bg = null;
-        //类型
-        _this.type = "flag1";
-        return _this;
-        // this.init("flag1");
-    }
-    Flag.prototype.init = function (_type, _passNum) {
-        this.type = _type;
-        this.passNum = _passNum;
-        var texture = Laya.loader.getRes("res/img/" + this.type + ".png");
-        this.bg = new Laya.Sprite();
-        this.bg.graphics.drawTexture(texture, 0, 0, 56, 80);
-        this.addChild(this.bg);
-        if (this.type == "flag2") {
-            //关卡
-            this.txt = new Laya.Text();
-            this.txt.text = "" + this.passNum;
-            this.txt.fontSize = 20;
-            this.txt.bold = true; //粗体
-            this.txt.pos(8, 10);
-            this.addChild(this.txt);
+var flag;
+(function (flag) {
+    var Flag = /** @class */ (function (_super) {
+        __extends(Flag, _super);
+        function Flag() {
+            var _this = _super.call(this) || this;
+            //背景贴图纹理
+            _this.bgTexture = null;
+            //背景
+            _this.bg = null;
+            //类型
+            _this.type = "flag1";
+            return _this;
+            // this.init("flag1");
         }
-    };
-    //事件名称
-    Flag.DIE = "die";
-    return Flag;
-}(Laya.Sprite));
+        Flag.prototype.init = function (_type, _passNum) {
+            this.type = _type;
+            this.passNum = _passNum;
+            var texture = Laya.loader.getRes("res/img/" + this.type + ".png");
+            this.bg = new Laya.Sprite();
+            this.bg.graphics.drawTexture(texture, 0, 0, 56, 80);
+            this.addChild(this.bg);
+            if (this.type == "flag2") {
+                //关卡
+                this.txt = new Laya.Text();
+                this.txt.text = "" + this.passNum;
+                this.txt.fontSize = 20;
+                this.txt.bold = true; //粗体
+                this.txt.pos(8, 10);
+                this.addChild(this.txt);
+            }
+        };
+        //事件名称
+        Flag.DIE = "die";
+        return Flag;
+    }(Laya.Sprite));
+    flag.Flag = Flag;
+})(flag || (flag = {}));
 //# sourceMappingURL=Flag.js.map
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -53523,50 +53539,54 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Flyball = /** @class */ (function (_super) {
-    __extends(Flyball, _super);
-    function Flyball() {
-        var _this = _super.call(this) || this;
-        _this.init();
-        return _this;
-    }
-    Flyball.prototype.init = function () {
-        var num = 5 + Math.ceil(5 * Math.random());
-        for (var i = 0; i < num; i++) {
-            this.createFlyball();
+var flyball;
+(function (flyball_1) {
+    var Flyball = /** @class */ (function (_super) {
+        __extends(Flyball, _super);
+        function Flyball() {
+            var _this = _super.call(this) || this;
+            _this.init();
+            return _this;
         }
-    };
-    Flyball.prototype.createFlyball = function () {
-        var flyball = new Laya.Sprite();
-        flyball.loadImage("res/img/flyball.png");
-        this.addChild(flyball);
-        var terminalY = 600 + Math.ceil(800 * Math.random()); //随机位置出现        
-        var x = Math.ceil(Laya.stage.width * Math.random());
-        var y = Math.ceil(500 * Math.random());
-        flyball.pos(x, y); //到达的位置， 随机
-        var time = 3000 * Math.ceil(Math.random());
-        this.addYellowFilter(flyball);
-        // flyball使用Tween.from缓动
-        Laya.Tween.from(flyball, { y: terminalY }, time, null, Laya.Handler.create(this, this.tweenComplete, [flyball]));
-    };
-    Flyball.prototype.tweenComplete = function (flyball) {
-        flyball.destroy();
-    };
-    //添加滤镜
-    Flyball.prototype.addYellowFilter = function (me) {
-        var g = Math.random() * 0.7 + 0.3;
-        var Mat = [
-            1, 0, 0, 0, 0,
-            g, 0, 0, 0, 0,
-            0, 0, 0, 0, 0,
-            0, 0, 0, 1, 0,
-        ];
-        var Filter = new Laya.ColorFilter(Mat);
-        me.filters = [Filter];
-        me.alpha = 0.6;
-    };
-    return Flyball;
-}(Laya.Sprite));
+        Flyball.prototype.init = function () {
+            var num = 5 + Math.ceil(5 * Math.random());
+            for (var i = 0; i < num; i++) {
+                this.createFlyball();
+            }
+        };
+        Flyball.prototype.createFlyball = function () {
+            var flyball = new Laya.Sprite();
+            flyball.loadImage("res/img/flyball.png");
+            this.addChild(flyball);
+            var terminalY = 600 + Math.ceil(800 * Math.random()); //随机位置出现        
+            var x = Math.ceil(Laya.stage.width * Math.random());
+            var y = Math.ceil(500 * Math.random());
+            flyball.pos(x, y); //到达的位置， 随机
+            var time = 3000 * Math.ceil(Math.random());
+            this.addYellowFilter(flyball);
+            // flyball使用Tween.from缓动
+            Laya.Tween.from(flyball, { y: terminalY }, time, null, Laya.Handler.create(this, this.tweenComplete, [flyball]));
+        };
+        Flyball.prototype.tweenComplete = function (flyball) {
+            flyball.destroy();
+        };
+        //添加滤镜
+        Flyball.prototype.addYellowFilter = function (me) {
+            var g = Math.random() * 0.7 + 0.3;
+            var Mat = [
+                1, 0, 0, 0, 0,
+                g, 0, 0, 0, 0,
+                0, 0, 0, 0, 0,
+                0, 0, 0, 1, 0,
+            ];
+            var Filter = new Laya.ColorFilter(Mat);
+            me.filters = [Filter];
+            me.alpha = 0.6;
+        };
+        return Flyball;
+    }(Laya.Sprite));
+    flyball_1.Flyball = Flyball;
+})(flyball || (flyball = {}));
 //# sourceMappingURL=Flyball.js.map
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -53578,78 +53598,82 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Line = /** @class */ (function (_super) {
-    __extends(Line, _super);
-    function Line() {
-        var _this = _super.call(this) || this;
-        //背景贴图纹理
-        _this.bgTexture = null;
-        //背景
-        _this.bg = null;
-        _this.isOut = false; //右边超出屏幕
-        return _this;
-        // this.init();
-    }
-    Line.prototype.init = function (_type, maxAng) {
-        this.type = _type; //line的类型
-        this.angle = maxAng * Math.random(); //line的旋转角度,随机-30~30
-        if (this.type == "line") {
-            this.angle = 0;
+var line;
+(function (line) {
+    var Line = /** @class */ (function (_super) {
+        __extends(Line, _super);
+        function Line() {
+            var _this = _super.call(this) || this;
+            //背景贴图纹理
+            _this.bgTexture = null;
+            //背景
+            _this.bg = null;
+            _this.isOut = false; //右边超出屏幕
+            return _this;
+            // this.init();
         }
-        //如果不开启autoSize 父容器的宽度和高度无法获取 
-        this.autoSize = true;
-        if (this.bg == null) {
-            //贴图纹理
-            this.bgTexture = Laya.loader.getRes("res/img/" + _type + ".png");
-            this.bg = new Laya.Sprite();
+        Line.prototype.init = function (_type, maxAng) {
+            this.type = _type; //line的类型
+            this.angle = maxAng * Math.random(); //line的旋转角度,随机-30~30
+            if (this.type == "line") {
+                this.angle = 0;
+            }
+            //如果不开启autoSize 父容器的宽度和高度无法获取 
+            this.autoSize = true;
+            if (this.bg == null) {
+                //贴图纹理
+                this.bgTexture = Laya.loader.getRes("res/img/" + _type + ".png");
+                this.bg = new Laya.Sprite();
+                this.bg.graphics.clear();
+                this.addChild(this.bg);
+            }
+            //随机一个长度的line
             this.bg.graphics.clear();
-            this.addChild(this.bg);
-        }
-        //随机一个长度的line
-        this.bg.graphics.clear();
-        this.rotation = this.angle;
-        this.bg.graphics.drawTexture(this.bgTexture, 0, 0, 87, 14);
-        // this.bg.graphics.fillTexture(this.bgTexture, 0, 0, w, 10);
-        this.creteBlockFilter(); //滤镜
-        Laya.timer.frameLoop(1, this, this.onLoop);
-    };
-    Line.prototype.onLoop = function () {
-        // this.x -= 1;
-        //判断右边是否除了边界 如果出了 就通知生成新的line 这里增加一个变量来判断当前是否已经通知外部了 
-        if (!this.isOut && (this.x + this.width) <= Laya.stage.width) {
-            this.isOut = true;
-            this.event(Line.OUT_LINE, this);
-            // console.log(this.x + this.width);
-        }
-        else if ((this.x + this.width) < 0) {
-            //判断整个line是否不在屏幕里面了 如果不在了 移除当前floor
-            Laya.timer.clear(this, this.onLoop);
-            // this.visible = false;
-            this.destroy();
-            this.event(Line.DIE_LINE, this);
-        }
-    };
-    /**创建黑色滤镜**/
-    Line.prototype.creteBlockFilter = function () {
-        //由 20 个项目（排列成 4 x 5 矩阵）组成的数组，黑图
-        var blockMat = [
-            0.216, 0, 0, 0, 0,
-            0.294, 0, 0, 0, 0,
-            0.294, 0, 0, 0, 0,
-            0, 0, 0, 1, 0,
-        ];
-        //创建一个颜色滤镜对象
-        var blockFilter = new Laya.ColorFilter(blockMat);
-        //添加颜色滤镜
-        this.filters = [blockFilter];
-    };
-    //事件名称
-    //超过屏幕一定值出发新的floor事件
-    Line.OUT_LINE = "out_line";
-    //整个line都不在屏幕里面事件
-    Line.DIE_LINE = "die_line";
-    return Line;
-}(Laya.Sprite));
+            this.rotation = this.angle;
+            this.bg.graphics.drawTexture(this.bgTexture, 0, 0, 87, 14);
+            // this.bg.graphics.fillTexture(this.bgTexture, 0, 0, w, 10);
+            this.creteBlockFilter(); //滤镜
+            Laya.timer.frameLoop(1, this, this.onLoop);
+        };
+        Line.prototype.onLoop = function () {
+            // this.x -= 1;
+            //判断右边是否除了边界 如果出了 就通知生成新的line 这里增加一个变量来判断当前是否已经通知外部了 
+            if (!this.isOut && (this.x + this.width) <= Laya.stage.width) {
+                this.isOut = true;
+                this.event(Line.OUT_LINE, this);
+                // console.log(this.x + this.width);
+            }
+            else if ((this.x + this.width) < 0) {
+                //判断整个line是否不在屏幕里面了 如果不在了 移除当前floor
+                Laya.timer.clear(this, this.onLoop);
+                // this.visible = false;
+                this.destroy();
+                this.event(Line.DIE_LINE, this);
+            }
+        };
+        /**创建黑色滤镜**/
+        Line.prototype.creteBlockFilter = function () {
+            //由 20 个项目（排列成 4 x 5 矩阵）组成的数组，黑图
+            var blockMat = [
+                0.216, 0, 0, 0, 0,
+                0.294, 0, 0, 0, 0,
+                0.294, 0, 0, 0, 0,
+                0, 0, 0, 1, 0,
+            ];
+            //创建一个颜色滤镜对象
+            var blockFilter = new Laya.ColorFilter(blockMat);
+            //添加颜色滤镜
+            this.filters = [blockFilter];
+        };
+        //事件名称
+        //超过屏幕一定值出发新的floor事件
+        Line.OUT_LINE = "out_line";
+        //整个line都不在屏幕里面事件
+        Line.DIE_LINE = "die_line";
+        return Line;
+    }(Laya.Sprite));
+    line.Line = Line;
+})(line || (line = {}));
 //# sourceMappingURL=Line.js.map
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -53661,123 +53685,128 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var MapLine = /** @class */ (function (_super) {
-    __extends(MapLine, _super);
-    function MapLine() {
-        var _this = _super.call(this) || this;
-        //要移除的地板
-        _this.dieLineList = [];
-        _this.type = "line";
-        _this.i = 1; //线段编号
-        _this.count = 18;
-        _this.passNum = 0; //关卡，控制难度
-        _this.direction = true; //旋转方向
-        _this.changeDirArr = []; //记录要转换节点的下标
-        return _this;
-        // this.init();
-    }
-    MapLine.prototype.init = function (passNum) {
-        this.passNum = passNum;
-        this.addLine(this.type, 0, Laya.stage.height / 2 - 200, true); //线段初始位置
-        Laya.timer.frameLoop(1, this, this.onLoop);
-    };
-    MapLine.prototype.onLoop = function () {
-        //监听有没有地板要移除
-        while (this.dieLineList.length > 0) {
-            var line = this.dieLineList.shift();
-            line.removeSelf();
-            // line.destory();
-            Laya.Pool.recover("line", line); //放到对象池中
+var mapline;
+(function (mapline) {
+    var Line = line.Line;
+    var Flag = flag.Flag;
+    var MapLine = /** @class */ (function (_super) {
+        __extends(MapLine, _super);
+        function MapLine() {
+            var _this = _super.call(this) || this;
+            //要移除的地板
+            _this.dieLineList = [];
+            _this.type = "line";
+            _this.i = 1; //线段编号
+            _this.count = 15;
+            _this.passNum = 0; //关卡，控制难度
+            _this.direction = true; //旋转方向
+            _this.changeDirArr = []; //记录要转换节点的下标
+            return _this;
+            // this.init();
         }
-    };
-    //增加line
-    MapLine.prototype.addLine = function (type, x, y, direction) {
-        var maxAng = 5 + 2 * this.passNum; //控制难度1：旋转角度随机，根据关卡增大
-        if (maxAng >= 30)
-            maxAng = 30; //最大变化角度是30， -30~30
-        if (!direction)
-            maxAng = -maxAng; //旋转的方向
-        // var line = new Line();
-        var line = Laya.Pool.getItemByClass("line", Line);
-        line.init(type, maxAng);
-        line.once(Line.OUT_LINE, this, this.getLine); //监听是否要生成一个新的line
-        line.once(Line.DIE_LINE, this, this.delLine); //监听是否要移除line
-        line.x = x;
-        line.y = y;
-        this.addChild(line);
-    };
-    // 获取上一个line，计算下一个line的位置信息，并生成新的line
-    MapLine.prototype.getLine = function (line) {
-        //新生成的line的坐标
-        var rad = 2 * Math.PI / 360 * line.angle; //角度边弧度
-        var x = line.x + line.width * Math.cos(rad) - 5;
-        var y = line.y + line.width * Math.sin(rad);
-        if (this.i > this.count) {
-            this.i = 1;
-            //改变铁丝类型
-            this.type = this.type == "line" ? "line2" : "line";
-            if (this.type == "line2") {
-                this.count = 5 + Math.ceil(8 * Math.random()) + this.passNum; //控制难度2：带刺线段数，随关数增加 
-                //开始位置在中间下面，则旋转角度为负
-                y > Laya.stage.height / 2 ? this.direction = false : this.direction = true;
+        MapLine.prototype.init = function (passNum) {
+            this.passNum = passNum;
+            this.addLine(this.type, 0, Laya.stage.height / 2 - 200, true); //线段初始位置
+            Laya.timer.frameLoop(1, this, this.onLoop);
+        };
+        MapLine.prototype.onLoop = function () {
+            //监听有没有地板要移除
+            while (this.dieLineList.length > 0) {
+                var line = this.dieLineList.shift();
+                line.removeSelf();
+                Laya.Pool.recover("line", line); //放到对象池中
             }
-            else {
-                this.count = 8;
+        };
+        //增加line
+        MapLine.prototype.addLine = function (type, x, y, direction) {
+            var maxAng = 5 + 2 * this.passNum; //控制难度1：旋转角度随机，根据关卡增大
+            if (maxAng >= 30)
+                maxAng = 30; //最大变化角度是30， -30~30
+            if (!direction)
+                maxAng = -maxAng; //旋转的方向
+            // var line = new Line();
+            var line = Laya.Pool.getItemByClass("line", Line);
+            line.init(type, maxAng);
+            line.once(Line.OUT_LINE, this, this.getLine); //监听是否要生成一个新的line
+            line.once(Line.DIE_LINE, this, this.delLine); //监听是否要移除line
+            line.x = x;
+            line.y = y;
+            this.addChild(line);
+        };
+        // 获取上一个line，计算下一个line的位置信息，并生成新的line
+        MapLine.prototype.getLine = function (line) {
+            //新生成的line的坐标
+            var rad = 2 * Math.PI / 360 * line.angle; //角度边弧度
+            var x = line.x + line.width * Math.cos(rad) - 5;
+            var y = line.y + line.width * Math.sin(rad);
+            if (this.i > this.count) {
+                this.i = 1;
+                //改变铁丝类型
+                this.type = this.type == "line" ? "line2" : "line";
+                if (this.type == "line2") {
+                    this.count = 5 + Math.ceil(8 * Math.random()) + this.passNum; //控制难度2：带刺线段数，随关数增加 
+                    //开始位置在中间下面，则旋转角度为负
+                    y > Laya.stage.height / 2 ? this.direction = false : this.direction = true;
+                }
+                else {
+                    this.count = 8;
+                }
+                this.changeDirArr = [];
+                var n; //控制难度3：取n个节点位置转换方向  
+                if (this.passNum < 5) {
+                    n = 0;
+                }
+                else if (this.passNum < 10) {
+                    n = 1;
+                }
+                else if (this.passNum < 20) {
+                    n = 2;
+                }
+                else if (this.passNum < 30) {
+                    n = 3;
+                }
+                else {
+                    n = 4;
+                }
+                for (var i = 0; i < n; i++) { //取n次
+                    var index = Math.ceil(this.count * Math.random());
+                    this.changeDirArr.push(index);
+                }
             }
-            this.changeDirArr = [];
-            var n; //控制难度3：取n个节点位置转换方向  
-            if (this.passNum < 5) {
-                n = 0;
+            //随机在第n个地方转换方向
+            //在changeDirArr记录位置转变方向
+            for (var i = 0; i < this.changeDirArr.length; i++) {
+                if (this.i == this.changeDirArr[i])
+                    this.direction = !this.direction;
             }
-            else if (this.passNum < 10) {
-                n = 1;
-            }
-            else if (this.passNum < 20) {
-                n = 2;
-            }
-            else if (this.passNum < 30) {
-                n = 3;
-            }
-            else {
-                n = 4;
-            }
-            for (var i = 0; i < n; i++) { //取n次
-                var index = Math.ceil(this.count * Math.random());
-                this.changeDirArr.push(index);
-            }
-        }
-        //随机在第n个地方转换方向
-        //在changeDirArr记录位置转变方向
-        for (var i = 0; i < this.changeDirArr.length; i++) {
-            if (this.i == this.changeDirArr[i])
+            if (y < 100 || y > Laya.stage.height - 100) { //到顶,底后 转变旋转方向
                 this.direction = !this.direction;
-        }
-        if (y < 100 || y > Laya.stage.height - 100) { //到顶,底后 转变旋转方向
-            this.direction = !this.direction;
-        }
-        //旗子 出现在直线上
-        if (this.type == "line" && (this.i == 2 || this.i == this.count - 1)) {
-            var name = this.i == 2 ? "flag1" : "flag2";
-            if (this.passNum > 0) {
-                this.flag = new Flag();
-                this.flag.init(name, this.passNum);
-                this.flag.pivot(0, 70);
-                this.flag.pos(x, y);
-                this.flag.zOrder = 1;
-                this.addChild(this.flag);
             }
-            if (name == "flag2")
-                this.passNum += 1;
-        }
-        this.i++;
-        this.addLine(this.type, x, y, this.direction);
-    };
-    //  删除line
-    MapLine.prototype.delLine = function (line) {
-        this.dieLineList.push(line);
-    };
-    return MapLine;
-}(Laya.Sprite));
+            //旗子 出现在直线上
+            if (this.type == "line" && (this.i == 2 || this.i == this.count - 1)) {
+                var name = this.i == 2 ? "flag1" : "flag2";
+                if (this.passNum > 0) {
+                    this.flag = new Flag();
+                    this.flag.init(name, this.passNum);
+                    this.flag.pivot(0, 75);
+                    this.flag.pos(x, y);
+                    this.flag.zOrder = 1;
+                    this.addChild(this.flag);
+                }
+                if (name == "flag2")
+                    this.passNum += 1;
+            }
+            this.i++;
+            this.addLine(this.type, x, y, this.direction);
+        };
+        //  删除line
+        MapLine.prototype.delLine = function (line) {
+            this.dieLineList.push(line);
+        };
+        return MapLine;
+    }(Laya.Sprite));
+    mapline.MapLine = MapLine;
+})(mapline || (mapline = {}));
 //# sourceMappingURL=MapLine.js.map
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -53789,310 +53818,324 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Score = /** @class */ (function (_super) {
-    __extends(Score, _super);
-    function Score() {
-        var _this = _super.call(this) || this;
-        _this.init();
-        return _this;
-    }
-    Score.prototype.init = function () {
-        //步数
-        this.scoreTxt = new Laya.Text();
-        this.scoreTxt.text = "0";
-        this.scoreTxt.fontSize = 100;
-        this.scoreTxt.font = "Microsoft YaHei";
-        this.scoreTxt.color = "#7babb4";
-        this.scoreTxt.bold = true; //粗体
-        this.scoreTxt.x = (Laya.stage.width - this.scoreTxt.textWidth) / 2;
-        this.scoreTxt.y = 10;
-        this.addChild(this.scoreTxt);
-        //食物数
-        this.foodTxt = new Laya.Text();
-        this.foodTxt.text = "0";
-        this.foodTxt.fontSize = 40;
-        this.foodTxt.font = "Microsoft YaHei";
-        this.foodTxt.color = "#fff";
-        this.foodTxt.bold = true; //粗体
-        this.foodTxt.x = Laya.stage.width - this.foodTxt.textWidth - 30;
-        this.foodTxt.y = 10;
-        this.addChild(this.foodTxt);
-        this.smallFood = new Laya.Sprite;
-        this.smallFood.loadImage("res/img/food.png");
-        this.smallFood.scale(0.4, 0.4);
-        this.smallFood.pos(this.foodTxt.x - 50, this.foodTxt.y + 10);
-        this.addChild(this.smallFood);
-        //关数
-        this.king = new Laya.Sprite;
-        this.king.loadImage("res/img/king.png");
-        this.king.pos(this.foodTxt.x - 50, this.foodTxt.y + 10);
-        this.king.x = this.scoreTxt.x;
-        this.king.y = 150;
-        this.addChild(this.king);
-        this.levelTxt = new Laya.Text();
-        this.levelTxt.text = "0";
-        this.levelTxt.fontSize = 40;
-        this.levelTxt.font = "Microsoft YaHei";
-        this.levelTxt.color = "#fff";
-        this.levelTxt.bold = true; //粗体
-        this.levelTxt.x = this.king.x + 50;
-        this.levelTxt.y = 140;
-        this.addChild(this.levelTxt);
-        //gameover
-        this.gameoverTxt = new Laya.Text();
-        this.gameoverTxt.text = "Game Over !\n点击继续游戏";
-        this.gameoverTxt.fontSize = 90;
-        this.gameoverTxt.font = "Microsoft YaHei";
-        this.gameoverTxt.color = "#7babb4";
-        this.gameoverTxt.bold = true; //粗体
-        this.gameoverTxt.x = (Laya.stage.width - this.gameoverTxt.textWidth) / 2;
-        this.gameoverTxt.y = Laya.stage.height / 2 - 100;
-        this.gameoverTxt.visible = false;
-        this.addChild(this.gameoverTxt);
-    };
-    return Score;
-}(Laya.Sprite));
-//# sourceMappingURL=Score.js.map
-// import Cloud from "./Cloud";
-// import MapLine from "./MapLine";
-// import Balloon from "./Balloon";
-// import Bird from "./Bird";
-// import Score from "./Score";
-// 程序入口
-var GameMain = /** @class */ (function () {
-    function GameMain() {
-        this.score = 0;
-        this.level = 0;
-        this.step = 0;
-        this.jumpV = 1.6; //跳跃时获得的向上速度
-        this.f = true; //气球旋转方向
-        this.W = 955;
-        this.H = 1925;
-        //TS或JS版本初始化微信小游戏的适配
-        Laya.MiniAdpter.init();
-        //初始化引擎，背景图宽高
-        Laya.init(this.W, this.H, Laya.WebGL);
-        // console.log(Laya.Browser.clientWidth, Laya.Browser.clientHeight);
-        //设置适配模式
-        Laya.stage.scaleMode = "showall";
-        //设置居中对齐
-        Laya.stage.alignH = "center";
-        //设置横竖屏
-        Laya.stage.screenMode = "vertical";
-        //加载资源
-        var asset = [{
-                url: [
-                    "res/img/sky.png",
-                    "res/img/cloud.png",
-                    "res/img/line.png",
-                    "res/img/line2.png",
-                    "res/img/flag1.png",
-                    "res/img/flag2.png",
-                    "res/img/food.png",
-                ],
-                type: Laya.Loader.IMAGE
-            }, {
-                url: [
-                    "res/atlas/bug.atlas",
-                    "res/atlas/finger.atlas",
-                ],
-                type: Laya.Loader.ATLAS
-            }];
-        Laya.loader.load(asset, Laya.Handler.create(this, this.onLoaded));
-        Laya.loader.load("balloon.part", Laya.Handler.create(this, this.onPartLoaded), null, Laya.Loader.JSON);
-        Laya.Stat.show();
-    }
-    GameMain.prototype.onLoaded = function () {
-        //实例一个背景
-        // Laya.stage.bgColor="#c3ebef";
-        var bg = new Laya.Image();
-        bg.skin = "res/img/sky.png";
-        bg.rotation = 90;
-        bg.pos(955, 0);
-        Laya.stage.addChild(bg);
-        //白云
-        this.cloud = new Cloud();
-        this.cloud.pos(0, 0);
-        this.cloud.zOrder = 3;
-        Laya.stage.addChild(this.cloud);
-        //手指动画
-        this.createfingerAni();
-        this.fingerAni.play();
-        //分数
-        this.mapScore = new Score();
-        Laya.stage.addChild(this.mapScore);
-        this.addPinkFilter(this.mapScore.smallFood);
-        this.restart();
-    };
-    ;
-    GameMain.prototype.restart = function () {
-        //清除铁丝
-        if (this.mapLine) {
-            Laya.timer.clear(this, this.onLoop);
-            this.mapLine.destroy();
-            this.bird.destroy();
-            this.mapScore.gameoverTxt.visible = false;
+var score;
+(function (score) {
+    var Score = /** @class */ (function (_super) {
+        __extends(Score, _super);
+        function Score() {
+            var _this = _super.call(this) || this;
+            _this.init();
+            return _this;
         }
+        Score.prototype.init = function () {
+            //步数
+            this.scoreTxt = new Laya.Text();
+            this.scoreTxt.text = "0";
+            this.scoreTxt.fontSize = 100;
+            this.scoreTxt.font = "Microsoft YaHei";
+            this.scoreTxt.color = "#7babb4";
+            this.scoreTxt.bold = true; //粗体
+            this.scoreTxt.x = (Laya.stage.width - this.scoreTxt.textWidth) / 2;
+            this.scoreTxt.y = 10;
+            this.addChild(this.scoreTxt);
+            //食物数
+            this.foodTxt = new Laya.Text();
+            this.foodTxt.text = "0";
+            this.foodTxt.fontSize = 40;
+            this.foodTxt.font = "Microsoft YaHei";
+            this.foodTxt.color = "#fff";
+            this.foodTxt.bold = true; //粗体
+            this.foodTxt.x = Laya.stage.width - this.foodTxt.textWidth - 30;
+            this.foodTxt.y = 10;
+            this.addChild(this.foodTxt);
+            this.smallFood = new Laya.Sprite;
+            this.smallFood.loadImage("res/img/food.png");
+            this.smallFood.scale(0.4, 0.4);
+            this.smallFood.pos(this.foodTxt.x - 50, this.foodTxt.y + 10);
+            this.addChild(this.smallFood);
+            //关数
+            this.king = new Laya.Sprite;
+            this.king.loadImage("res/img/king.png");
+            this.king.pos(this.foodTxt.x - 50, this.foodTxt.y + 10);
+            this.king.x = this.scoreTxt.x;
+            this.king.y = 150;
+            this.addChild(this.king);
+            this.levelTxt = new Laya.Text();
+            this.levelTxt.text = "0";
+            this.levelTxt.fontSize = 40;
+            this.levelTxt.font = "Microsoft YaHei";
+            this.levelTxt.color = "#fff";
+            this.levelTxt.bold = true; //粗体
+            this.levelTxt.x = this.king.x + 50;
+            this.levelTxt.y = 140;
+            this.addChild(this.levelTxt);
+            //gameover
+            this.gameoverTxt = new Laya.Text();
+            this.gameoverTxt.text = "Game Over !\n点击继续游戏";
+            this.gameoverTxt.fontSize = 90;
+            this.gameoverTxt.font = "Microsoft YaHei";
+            this.gameoverTxt.color = "#7babb4";
+            this.gameoverTxt.bold = true; //粗体
+            this.gameoverTxt.x = (Laya.stage.width - this.gameoverTxt.textWidth) / 2;
+            this.gameoverTxt.y = Laya.stage.height / 2 - 100;
+            this.gameoverTxt.visible = false;
+            this.addChild(this.gameoverTxt);
+        };
+        return Score;
+    }(Laya.Sprite));
+    score.Score = Score;
+})(score || (score = {}));
+//# sourceMappingURL=Score.js.map
+var game;
+(function (game) {
+    // import Cloud from "./Cloud";
+    // import MapLine from "./MapLine";
+    // import Balloon from "./Balloon";
+    // import Bird from "./Bird";
+    // import Score from "./Score";
+    var Cloud = cloud.Cloud;
+    var MapLine = mapline.MapLine;
+    var Balloon = balloon.Balloon;
+    var Bird = bird.Bird;
+    var Score = score.Score;
+    var Flyball = flyball.Flyball;
+    // 程序入口
+    var GameMain = /** @class */ (function () {
+        function GameMain() {
+            this.score = 0;
+            this.level = 0;
+            this.step = 0;
+            this.jumpV = 1.6; //跳跃时获得的向上速度
+            this.f = true; //气球旋转方向
+            this.W = 955;
+            this.H = 1925;
+            //TS或JS版本初始化微信小游戏的适配
+            Laya.MiniAdpter.init();
+            //初始化引擎，背景图宽高
+            Laya.init(this.W, this.H, Laya.WebGL);
+            // console.log(Laya.Browser.clientWidth, Laya.Browser.clientHeight);
+            //设置适配模式
+            Laya.stage.scaleMode = "showall";
+            //设置居中对齐
+            Laya.stage.alignH = "center";
+            //设置横竖屏
+            Laya.stage.screenMode = "vertical";
+            //加载资源
+            var asset = [{
+                    url: [
+                        "res/img/sky.png",
+                        "res/img/cloud.png",
+                        "res/img/line.png",
+                        "res/img/line2.png",
+                        "res/img/flag1.png",
+                        "res/img/flag2.png",
+                        "res/img/food.png",
+                    ],
+                    type: Laya.Loader.IMAGE
+                }, {
+                    url: [
+                        "res/atlas/bug.atlas",
+                        "res/atlas/finger.atlas",
+                    ],
+                    type: Laya.Loader.ATLAS
+                }];
+            Laya.loader.load(asset, Laya.Handler.create(this, this.onLoaded));
+            Laya.loader.load("balloon.part", Laya.Handler.create(this, this.onPartLoaded), null, Laya.Loader.JSON);
+            Laya.Stat.show();
+        }
+        GameMain.prototype.onLoaded = function () {
+            //实例一个背景
+            // Laya.stage.bgColor="#c3ebef";
+            var bg = new Laya.Image();
+            bg.skin = "res/img/sky.png";
+            bg.rotation = 90;
+            bg.pos(955, 0);
+            Laya.stage.addChild(bg);
+            //白云
+            this.cloud = new Cloud();
+            this.cloud.pos(0, 0);
+            this.cloud.zOrder = 3;
+            Laya.stage.addChild(this.cloud);
+            //手指动画
+            this.createfingerAni();
+            this.fingerAni.play();
+            //分数
+            this.mapScore = new Score();
+            Laya.stage.addChild(this.mapScore);
+            this.addPinkFilter(this.mapScore.smallFood);
+            this.restart();
+        };
         ;
-        this.score = this.step;
-        //铁丝线
-        this.mapLine = new MapLine();
-        this.mapLine.init(this.level);
-        Laya.stage.addChild(this.mapLine);
-        this.mapLine.zOrder = 1;
-        //气球容器对象
-        this.balloon = new Balloon();
-        this.balloon.pos(200, Laya.stage.height / 2 - 300); //初始位置
-        this.balloon.zOrder = 2;
-        this.addPinkFilter(this.balloon);
-        Laya.stage.addChild(this.balloon);
-        //气球后面的部分
-        this.balloon1 = new Laya.Sprite();
-        this.balloon1.loadImage("res/img/balloon1.png");
-        Laya.stage.addChild(this.balloon1);
-        this.addPinkFilter(this.balloon1);
-        //小鸟
-        this.bird = new Bird();
-        Laya.stage.addChild(this.bird);
-        //监听舞台的点击事件
-        Laya.stage.on(Laya.Event.CLICK, this, this.clickHandler);
-        Laya.timer.frameLoop(1, this, this.onLoop);
-    };
-    GameMain.prototype.onLoop = function () {
-        //碰撞检测
-        for (var i = this.mapLine.numChildren - 1; i > -1; i--) {
-            var line = this.mapLine.getChildAt(i);
-            //如果气球碰到带刺铁丝，就把气球销毁,播放销毁动画
-            //气球圈里的上边点，下边点 
-            if (line.type == "line2" && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 70) || line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 190))) {
-                // this.balloon.removeSelf(); //将自身从父节点移除
-                // this.balloon.destroy(); //销毁
-                this.balloon.visible = false; //不可见
-                Laya.stage.off(Laya.Event.CLICK, this, this.clickHandler); //移除点击事件 
-                //播放粒子
-                this.sp.x = this.balloon.x + 50;
-                this.sp.y = this.balloon.y + 50;
-                this.sp.emitter.start();
-                Laya.timer.frameOnce(5, this, function () { this.sp.emitter.stop(); });
-                //gameover
-                this.mapScore.gameoverTxt.visible = true;
-                //注册舞台点击事件，点击重新开始游戏
-                this.mapScore.gameoverTxt.once(Laya.Event.CLICK, this, this.restart);
+        GameMain.prototype.restart = function () {
+            //清除铁丝
+            if (this.mapLine) {
+                Laya.timer.clear(this, this.onLoop);
+                this.mapLine.destroy();
+                this.bird.destroy();
+                this.mapScore.gameoverTxt.visible = false;
             }
-            //检测气球下落在line上了
-            if (line.type == "line" && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 72))) {
-                //如果落到地板了 就把气球的坐标设置到地板上面，重置速度为0
-                this.balloon.y = line.y - 72;
-                this.balloon.vy = 0;
-            }
-            //检测气球上升到line上了
-            if (line.type == "line" && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 185))) {
-                this.balloon.y = line.y - 185 + 14;
-                this.balloon.vy = 0;
-            }
-            //检测气球碰到旗子
-            if ((line.type == "flag1" || line.type == "flag2") && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 90))) {
-                line.rotation = 90; //旗子旋转
-                //Flyball 放气球
-                if (line.type == "flag1" && !(line.hit)) {
-                    var flyball = new Flyball();
-                    Laya.stage.addChild(flyball);
-                    line.hit = true;
-                    this.level += 1;
-                    this.mapScore.levelTxt.text = '' + this.level;
-                    this.step = this.score; //记录一关开始时的步数
+            ;
+            this.score = this.step;
+            //铁丝线
+            this.mapLine = new MapLine();
+            this.mapLine.init(this.level);
+            Laya.stage.addChild(this.mapLine);
+            this.mapLine.zOrder = 1;
+            //气球容器对象
+            this.balloon = new Balloon();
+            this.balloon.pos(200, Laya.stage.height / 2 - 300); //初始位置
+            this.balloon.zOrder = 2;
+            this.addPinkFilter(this.balloon);
+            Laya.stage.addChild(this.balloon);
+            //气球后面的部分
+            this.balloon1 = new Laya.Sprite();
+            this.balloon1.loadImage("res/img/balloon1.png");
+            Laya.stage.addChild(this.balloon1);
+            this.addPinkFilter(this.balloon1);
+            //小鸟
+            this.bird = new Bird();
+            Laya.stage.addChild(this.bird);
+            //监听舞台的点击事件
+            Laya.stage.on(Laya.Event.CLICK, this, this.clickHandler);
+            Laya.timer.frameLoop(1, this, this.onLoop);
+        };
+        GameMain.prototype.onLoop = function () {
+            //碰撞检测
+            for (var i = this.mapLine.numChildren - 1; i > -1; i--) {
+                var line = this.mapLine.getChildAt(i);
+                //如果气球碰到带刺铁丝，就把气球销毁,播放销毁动画
+                //气球圈里的上边点，下边点 
+                if (line.type == "line2" && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 70) || line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 190))) {
+                    // this.balloon.removeSelf(); //将自身从父节点移除
+                    // this.balloon.destroy(); //销毁
+                    this.balloon.visible = false; //不可见
+                    Laya.stage.off(Laya.Event.CLICK, this, this.clickHandler); //移除点击事件 
+                    //播放粒子
+                    this.sp.x = this.balloon.x + 50;
+                    this.sp.y = this.balloon.y + 50;
+                    this.sp.emitter.start();
+                    Laya.timer.frameOnce(5, this, function () { this.sp.emitter.stop(); });
+                    //gameover
+                    this.mapScore.gameoverTxt.visible = true;
+                    //注册舞台点击事件，点击重新开始游戏
+                    this.mapScore.gameoverTxt.once(Laya.Event.CLICK, this, this.restart);
+                }
+                //检测气球下落在line上了
+                if (line.type == "line" && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 72))) {
+                    //如果落到地板了 就把气球的坐标设置到地板上面，重置速度为0
+                    this.balloon.y = line.y - 72;
+                    this.balloon.vy = 0;
+                }
+                //检测气球上升到line上了
+                if (line.type == "line" && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 185))) {
+                    this.balloon.y = line.y - 185 + 14;
+                    this.balloon.vy = 0;
+                }
+                //检测气球碰到旗子
+                if ((line.type == "flag1" || line.type == "flag2") && (line.hitTestPoint(this.balloon.x + 64, this.balloon.y + 80))) {
+                    line.rotation = 90; //旗子旋转
+                    //Flyball 放气球
+                    if (line.type == "flag1" && !(line.hit)) {
+                        var flyball = new Flyball();
+                        Laya.stage.addChild(flyball);
+                        line.hit = true;
+                        this.level += 1;
+                        this.mapScore.levelTxt.text = '' + this.level;
+                        this.step = this.score; //记录一关开始时的步数
+                    }
                 }
             }
-        }
-        //小鸟位置跟随balloon
-        if (this.balloon.visible) {
-            this.bird.x = this.balloon.x + 60;
-            this.bird.y = this.balloon.y - 76;
-            this.balloon1.x = this.balloon.x;
-            this.balloon1.y = this.balloon.y + 40;
-        }
-        else {
-            this.bird.x += 4;
-            this.bird.y -= 2;
-            this.balloon1.visible = false;
-        }
-    };
-    //点击事件
-    GameMain.prototype.clickHandler = function () {
-        Laya.timer.clear(this, this.stopLoop);
-        Laya.timer.frameLoop(1, this, this.lineLoop);
-        Laya.timer.once(1200, this, this.stopLoop);
-        this.balloon.vy = -this.jumpV;
-        this.mapScore.scoreTxt.text = (++this.score) + "";
-        this.fingerAni.stop();
-        this.fingerAni.visible = false;
-    };
-    //铁丝移动
-    GameMain.prototype.lineLoop = function () {
-        for (var i = this.mapLine.numChildren - 1; i > -1; i--) {
-            var line = this.mapLine.getChildAt(i);
-            line.x -= 3;
-        }
-        // this.balloon.scaleX = 0.97;
-        // this.balloon1.scaleX = 0.97;
-        //气球左右摆动
-        if (this.balloon.rotation > 6 || this.balloon.rotation < 0) {
-            this.f = !this.f;
-        }
-        if (this.f) {
-            this.balloon.rotation += 1 / 5;
-            this.balloon1.rotation += 1 / 5;
-        }
-        if (!this.f) {
-            this.balloon.rotation -= 1 / 5;
-            this.balloon1.rotation -= 1 / 5;
-        }
-        //白云移动
-        this.cloud.x -= 1;
-        var child = this.cloud.getChildAt(0);
-        if (child.x + this.cloud.x < -1000) {
-            child.x += 1000 + Laya.stage.width;
-            child.y = 300 * Math.random();
-        }
-    };
-    //停止铁丝移动
-    GameMain.prototype.stopLoop = function () {
-        Laya.timer.clear(this, this.lineLoop);
-        this.fingerAni.play();
-        this.fingerAni.visible = true;
-    };
-    GameMain.prototype.onPartLoaded = function (settings) {
-        // 粒子
-        this.sp = new Laya.Particle2D(settings);
-        this.sp.autoPlay = false;
-        Laya.stage.addChild(this.sp);
-        this.sp.emitter.clear();
-        // this.sp.emitter.start();        
-        // this.sp.play();       
-        this.sp.zOrder = 1;
-    };
-    //创建手指动画
-    GameMain.prototype.createfingerAni = function () {
-        this.fingerAni = new Laya.Animation();
-        this.fingerAni.loadAnimation("finger.ani");
-        this.fingerAni.scaleX = 2;
-        this.fingerAni.scaleY = 2;
-        this.fingerAni.pos(this.W / 2 + 100, this.H / 2 + 600);
-        Laya.stage.addChild(this.fingerAni);
-    };
-    //添加粉色滤镜
-    GameMain.prototype.addPinkFilter = function (me) {
-        var Mat = [
-            0.988, 0, 0, 0, 0,
-            0.541, 0, 0, 0, 0,
-            0.675, 0, 0, 0, 0,
-            0, 0, 0, 1, 0,
-        ];
-        var pinkFilter = new Laya.ColorFilter(Mat);
-        me.filters = [pinkFilter];
-        me.alpha = 0.93;
-    };
-    return GameMain;
-}());
-new GameMain();
+            //小鸟位置跟随balloon
+            if (this.balloon.visible) {
+                this.bird.x = this.balloon.x + 60;
+                this.bird.y = this.balloon.y - 76;
+                this.balloon1.x = this.balloon.x;
+                this.balloon1.y = this.balloon.y + 40;
+            }
+            else {
+                this.bird.x += 4;
+                this.bird.y -= 2;
+                this.balloon1.visible = false;
+            }
+        };
+        //点击事件
+        GameMain.prototype.clickHandler = function () {
+            Laya.timer.clear(this, this.stopLoop);
+            Laya.timer.frameLoop(1, this, this.lineLoop);
+            Laya.timer.once(1200, this, this.stopLoop);
+            this.balloon.vy = -this.jumpV;
+            this.mapScore.scoreTxt.text = (++this.score) + "";
+            this.fingerAni.stop();
+            this.fingerAni.visible = false;
+        };
+        //铁丝移动
+        GameMain.prototype.lineLoop = function () {
+            for (var i = this.mapLine.numChildren - 1; i > -1; i--) {
+                var line = this.mapLine.getChildAt(i);
+                line.x -= 3;
+            }
+            // this.balloon.scaleX = 0.97;
+            // this.balloon1.scaleX = 0.97;
+            //气球左右摆动
+            if (this.balloon.rotation > 6 || this.balloon.rotation < 0) {
+                this.f = !this.f;
+            }
+            if (this.f) {
+                this.balloon.rotation += 1 / 5;
+                this.balloon1.rotation += 1 / 5;
+            }
+            if (!this.f) {
+                this.balloon.rotation -= 1 / 5;
+                this.balloon1.rotation -= 1 / 5;
+            }
+            //白云移动
+            this.cloud.x -= 1;
+            var child = this.cloud.getChildAt(0);
+            if (child.x + this.cloud.x < -1000) {
+                child.x += 1000 + Laya.stage.width;
+                child.y = 300 * Math.random();
+            }
+        };
+        //停止铁丝移动
+        GameMain.prototype.stopLoop = function () {
+            Laya.timer.clear(this, this.lineLoop);
+            this.fingerAni.play();
+            this.fingerAni.visible = true;
+        };
+        GameMain.prototype.onPartLoaded = function (settings) {
+            // 粒子
+            this.sp = new Laya.Particle2D(settings);
+            this.sp.autoPlay = false;
+            Laya.stage.addChild(this.sp);
+            this.sp.emitter.clear();
+            // this.sp.emitter.start();        
+            // this.sp.play();       
+            this.sp.zOrder = 1;
+        };
+        //创建手指动画
+        GameMain.prototype.createfingerAni = function () {
+            this.fingerAni = new Laya.Animation();
+            this.fingerAni.loadAnimation("finger.ani");
+            this.fingerAni.scaleX = 2;
+            this.fingerAni.scaleY = 2;
+            this.fingerAni.pos(this.W / 2 + 100, this.H / 2 + 600);
+            Laya.stage.addChild(this.fingerAni);
+        };
+        //添加粉色滤镜
+        GameMain.prototype.addPinkFilter = function (me) {
+            var Mat = [
+                0.988, 0, 0, 0, 0,
+                0.541, 0, 0, 0, 0,
+                0.675, 0, 0, 0, 0,
+                0, 0, 0, 1, 0,
+            ];
+            var pinkFilter = new Laya.ColorFilter(Mat);
+            me.filters = [pinkFilter];
+            me.alpha = 0.93;
+        };
+        return GameMain;
+    }());
+    game.GameMain = GameMain;
+})(game || (game = {}));
+new game.GameMain();
 //# sourceMappingURL=Game.js.map

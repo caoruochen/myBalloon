@@ -1,7 +1,9 @@
-class Balloon extends Laya.Sprite{   
-    public vy:number = 0;   //初始的y轴速度  
-    private gravity:number = 0.08;    //重力加速度  
-    // private jumpV:number = 3.8;     //跳跃时获得的向上速度
+module balloon {
+
+export class Balloon extends Laya.Sprite{   
+    public vy:number = 0;   //y轴速度  
+    public gravity:number = 0.08;  //重力加速度  
+    public jumpV:number = 1.6;     //跳跃时获得的向上速度
 
     constructor(){
         super();
@@ -22,14 +24,14 @@ class Balloon extends Laya.Sprite{
         balloon5.x = 65;        
         balloon5.y = 25;   
 
-        Laya.timer.frameLoop(1, this, this.onLoop);
+        // Laya.timer.frameLoop(1, this, this.onLoop);
    }
 
-   onLoop():void{
-        //气球下落
-        this.y += this.vy;
-        this.vy += this.gravity; 
-   }
+//    onLoop():void{
+//         //气球下落
+//         this.y += this.vy;
+//         this.vy += this.gravity; 
+//    }
 
     createImg(path: string): Laya.Sprite {
         var img : Laya.Sprite= new Laya.Sprite();
@@ -37,4 +39,5 @@ class Balloon extends Laya.Sprite{
         this.addChild(img);
         return img;   
     }
+}
 }

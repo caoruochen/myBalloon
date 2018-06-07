@@ -1,4 +1,6 @@
-class Line extends Laya.Sprite{
+module line {
+
+export class Line extends Laya.Sprite{
     //背景贴图纹理
     private bgTexture = null;
     //背景
@@ -12,6 +14,7 @@ class Line extends Laya.Sprite{
     //line类型
     public type:string;
     public angle:number; //旋转角度
+    public hit:boolean;
     
     constructor(){
         super();
@@ -50,7 +53,6 @@ class Line extends Laya.Sprite{
         if(!this.isOut && (this.x + this.width) <= Laya.stage.width){
             this.isOut = true;
             this.event(Line.OUT_LINE, this);
-            // console.log(this.x + this.width);
             
         }else if((this.x + this.width) < 0){
             //判断整个line是否不在屏幕里面了 如果不在了 移除当前floor
@@ -63,7 +65,6 @@ class Line extends Laya.Sprite{
 
     /**创建黑色滤镜**/
     creteBlockFilter():void{
-       //由 20 个项目（排列成 4 x 5 矩阵）组成的数组，黑图
 		var blockMat = 
         [
 				0.216, 0, 0, 0, 0, //R
@@ -71,9 +72,8 @@ class Line extends Laya.Sprite{
 				0.294, 0, 0, 0, 0, //B
 				0, 0, 0, 1, 0, //A
 		];
-		//创建一个颜色滤镜对象
 		var blockFilter = new Laya.ColorFilter(blockMat);
-        //添加颜色滤镜
         this.filters = [blockFilter];
     }
+}
 }

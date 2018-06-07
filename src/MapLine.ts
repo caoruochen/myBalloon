@@ -1,4 +1,8 @@
-class MapLine extends Laya.Sprite{
+module mapline {
+
+import Line = line.Line;
+import Flag = flag.Flag;
+export class MapLine extends Laya.Sprite{
     //要移除的地板
     private dieLineList = [];
     private type:string = "line";
@@ -96,10 +100,10 @@ class MapLine extends Laya.Sprite{
         //旗子 出现在直线上
         if(this.type=="line" && (this.i == 2 || this.i == this.count-1)){
             var name = this.i == 2 ? "flag1" : "flag2";    
-            if(this.passNum>0){
+            if(this.passNum > 0){
                 this.flag = new Flag();
                 this.flag.init(name,this.passNum);             
-                this.flag.pivot(0, 70);
+                this.flag.pivot(0, 75);
                 this.flag.pos(x,y);       
                 this.flag.zOrder = 1;     
                 this.addChild(this.flag);
@@ -113,6 +117,7 @@ class MapLine extends Laya.Sprite{
     //  删除line
     delLine(line):void{
 		this.dieLineList.push(line);
-    }
-    
+    }   
+}
+
 }

@@ -1,26 +1,34 @@
+module game {
+    
 // import Cloud from "./Cloud";
 // import MapLine from "./MapLine";
 // import Balloon from "./Balloon";
 // import Bird from "./Bird";
 // import Score from "./Score";
+import Cloud = cloud.Cloud;
+import MapLine = mapline.MapLine;
+import Balloon = balloon.Balloon;
+import Bird = bird.Bird;
+import Score = score.Score;
+import Flyball = flyball.Flyball;
+import Line = line.Line;
 // 程序入口
-class GameMain{
+export class GameMain{
     private cloud:Cloud;
     private mapLine:MapLine;
     private balloon:Balloon;
     private balloon1:Laya.Sprite;
     private bird:Bird;
     private fingerAni:Laya.Animation;
-    private score:number = 0;
     private mapScore:Score;
+    private step:number = 0;  //点击加1 的分数
+    private score:number = 0; //过一关时记录的分数
     private level:number = 0;
-    private step:number = 0;    
 
-    private jumpV:number = 1.6;     //跳跃时获得的向上速度
     private f:boolean = true; //气球旋转方向
     private sp: Laya.Particle2D; //粒子
-    public W:number = 955;
-    public H:number = 1925;
+    private W:number = 955;
+    private H:number = 1925;
 
     constructor()
     {
@@ -62,7 +70,6 @@ class GameMain{
 
     onLoaded():void{
         //实例一个背景
-        // Laya.stage.bgColor="#c3ebef";
         var bg = new Laya.Image();
         bg.skin = "res/img/sky.png";
         bg.rotation = 90;
@@ -70,7 +77,6 @@ class GameMain{
         Laya.stage.addChild(bg);
         //白云
         this.cloud = new Cloud();
-        this.cloud.pos(0,0);
         this.cloud.zOrder = 3;   
         Laya.stage.addChild(this.cloud);
 
@@ -87,14 +93,16 @@ class GameMain{
     };
 
     restart():void{
-        //清除铁丝
+        //清除铁丝,小鸟
         if(this.mapLine){
             Laya.timer.clear(this,this.onLoop);            
             this.mapLine.destroy();
-            this.bird.destroy();
+            this.bird.removeSelf();
+            Laya.Pool.recover("bird",this.bird);
             this.mapScore.gameoverTxt.visible = false;
         };
-        this.score = this.step;
+        this.step = this.score;
+
         //铁丝线
         this.mapLine = new MapLine();
         this.mapLine.init(this.level);
@@ -115,20 +123,34 @@ class GameMain{
         this.addPinkFilter(this.balloon1);
 
         //小鸟
-        this.bird = new Bird();
+        this.bird = Laya.Pool.getItemByClass("bird",Bird);
         Laya.stage.addChild(this.bird);
         
         //监听舞台的点击事件
         Laya.stage.on(Laya.Event.CLICK, this, this.clickHandler);
         Laya.timer.frameLoop(1,this,this.onLoop);              
-
     }
 
 
     onLoop():void{
+        //气球下落
+        this.balloon.y += this.balloon.vy;
+        this.balloon.vy += this.balloon.gravity; 
+        //小鸟位置跟随balloon
+        if(this.balloon.visible){
+            this.bird.x = this.balloon.x+60;
+            this.bird.y = this.balloon.y-76; 
+            this.balloon1.x = this.balloon.x;
+            this.balloon1.y = this.balloon.y+40;
+        }else{
+            this.bird.x += 4;
+            this.bird.y -= 2; 
+            this.balloon1.visible = false;
+        }
+
         //碰撞检测
 		for(var i = this.mapLine.numChildren - 1; i > -1; i--){
-			var line = this.mapLine.getChildAt(i);
+			var line:Line = this.mapLine.getChildAt(i) as Line;
 		    //如果气球碰到带刺铁丝，就把气球销毁,播放销毁动画
             //气球圈里的上边点，下边点 
             if(line.type == "line2" && (line.hitTestPoint(this.balloon.x+64, this.balloon.y+70) || line.hitTestPoint(this.balloon.x+64, this.balloon.y+190))){
@@ -169,23 +191,10 @@ class GameMain{
 
                     this.level += 1;
                     this.mapScore.levelTxt.text = ''+this.level;
-                    this.step = this.score; //记录一关开始时的步数
+                    this.score = this.step; //记录一关开始时的步数
                 }
             }
 		}
-        
-        //小鸟位置跟随balloon
-        if(this.balloon.visible){
-            this.bird.x = this.balloon.x+60;
-            this.bird.y = this.balloon.y-76; 
-            this.balloon1.x = this.balloon.x;
-            this.balloon1.y = this.balloon.y+40;
-        }else{
-            this.bird.x += 4;
-            this.bird.y -= 2; 
-            this.balloon1.visible = false;
-        }
-
     }
    
     
@@ -195,9 +204,9 @@ class GameMain{
         Laya.timer.frameLoop(1,this,this.lineLoop);                
         Laya.timer.once(1200,this,this.stopLoop);   
 
-        this.balloon.vy = -this.jumpV;
+        this.balloon.vy = -this.balloon.jumpV;
         
-		this.mapScore.scoreTxt.text = (++this.score) + "";    
+		this.mapScore.stepTxt.text = "" + (++this.step);    
 
         this.fingerAni.stop();  
         this.fingerAni.visible = false;    
@@ -205,7 +214,7 @@ class GameMain{
     //铁丝移动
     lineLoop():void{
         for(var i = this.mapLine.numChildren - 1; i > -1; i--){
-			var line = this.mapLine.getChildAt(i);
+			var line:Line = this.mapLine.getChildAt(i) as Line;
             line.x -= 3;
         }
         // this.balloon.scaleX = 0.97;
@@ -215,20 +224,20 @@ class GameMain{
             this.f = !this.f;
         }
         if(this.f){
-            this.balloon.rotation += 1/5;
-            this.balloon1.rotation += 1/5;
+            this.balloon.rotation += 0.15;
+            this.balloon1.rotation += 0.15;
         }
         if(!this.f){
-            this.balloon.rotation -= 1/5;
-            this.balloon1.rotation -= 1/5;
+            this.balloon.rotation -= 0.15;
+            this.balloon1.rotation -= 0.15;
         }
 
         //白云移动
         this.cloud.x -= 1;
-        var child = this.cloud.getChildAt(0);
-        if(child.x + this.cloud.x < -1000){
-            child.x += 1000+Laya.stage.width;
-            child.y = 300*Math.random();
+        var realcloud = this.cloud.realcloud;
+        if(realcloud.x + this.cloud.x < -1000){
+            realcloud.x += 1000 + Laya.stage.width;
+            realcloud.y = 300 * Math.random();
         }
     }
     //停止铁丝移动
@@ -275,5 +284,6 @@ class GameMain{
         me.alpha = 0.93;
     }
 }
+}
 
-new GameMain();
+new game.GameMain();
